@@ -1,14 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface RouteQuery {
-  query: string;
-  route: string;
-}
-
-interface HistoryState {
-  queries: RouteQuery[];
-}
-
 const initialState: HistoryState = {
   queries: [
     {
