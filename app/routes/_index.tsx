@@ -1,17 +1,17 @@
 import type { MetaFunction } from "@remix-run/node";
-import {Header} from "~/components/header/header";
+import { Header } from "~/components/header/header";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "REST/GraphiQL Client" },
+    { name: "description", content: "Welcome to REST/GraphiQL Client!" },
   ];
 };
 
 export default function Index() {
   return (
     <>
-      <Header/>
+      <Header />
       <main></main>
       <footer></footer>
     </>
