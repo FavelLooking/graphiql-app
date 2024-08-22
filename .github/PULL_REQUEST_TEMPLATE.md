@@ -1,14 +1,27 @@
-## 1. Overview:
+## Title
 
-This pull request introduces implementing Firebase authentication. Specified in the feature ticket `rss-graphql-2_02 feat: Implement Firebase authentication`
+[Task/Issue-Number](Task/Issue-Link)
 
-## 2. Features Implemented:
+## Description
 
-Implemented Firebase authentication
+Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
 
-## 3. Technical Details:
+## Type of change
 
-- Install Dependencies
-- Configure Firebase
-- Add Web App to Firebase Project:
-- Set Up Firebase in the Project
+Please delete options that are not relevant.
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] This change requires a documentation update
+
+## Screenshot
+
+Please attach screenshot to see the result of your work
+
+## Checklist:
+
+- [ ] My code follows the style guidelines of this project
+- [ ] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] My changes generate no new warnings
