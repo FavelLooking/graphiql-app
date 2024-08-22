@@ -1,11 +1,34 @@
-header {
+.header {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
   height: 4em;
   width: 100%;
-  //background: brown;
+  position: fixed;
+  background: #232323;
+  transition: 0.5s all;
+}
+
+.isSticky {
+  background: #bbbbbb;
+  height: 3em;
+}
+
+.isSticky .img_logo {
+  width: 2em;
+  height: 2em;
+}
+
+.isSticky .auth {
+  width: 15%;
+
+  button {
+    border-radius: 10px;
+    padding: 4px;
+    border: 1px #242424 solid;
+    background: #600707;
+  }
 }
 
 .logo {
@@ -14,6 +37,7 @@ header {
 .img_logo {
   width: 3em;
   height: 3em;
+  transition: 0.5s all;
 }
 
 .toggle {
@@ -24,6 +48,7 @@ header {
   label {
     color: #000000;
     position: relative;
+    transition: 0.5s all;
   }
 
   input[type="checkbox"] + label::before {
@@ -37,6 +62,7 @@ header {
     top: 0px;
     left: -65px;
     background: #600707;
+    transition: 0.5s all;
   }
 
   input[type="checkbox"] + label::after {
@@ -66,6 +92,7 @@ header {
   justify-content: space-evenly;
   align-items: center;
   width: 20%;
+  transition: 0.5s all;
 
   button {
     border-radius: 10px;
