@@ -20,6 +20,10 @@
   height: 2em;
 }
 
+.isSticky .toggle label {
+  color: #000000;
+}
+
 .isSticky .auth {
   width: 15%;
 
@@ -28,6 +32,7 @@
     padding: 4px;
     border: 1px #242424 solid;
     background: #600707;
+    color: #bbbbbb;
   }
 }
 
@@ -46,7 +51,7 @@
   }
 
   label {
-    color: #000000;
+    color: #bbbbbb;
     position: relative;
     transition: 0.5s all;
   }
@@ -101,8 +106,8 @@
     background: #600707;
   }
   button:hover {
-    background: blueviolet;
-    color: #600707;
+    background: #eeeeee;
+    color: #242424;
   }
 }
 
