@@ -1,0 +1,15 @@
+html,
+body {
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: space-between;
+}
+main {
+  margin-top: 4em;
+  flex: 1;
+}
