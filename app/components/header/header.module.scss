@@ -1,11 +1,42 @@
-header {
+$base-color-white: #bbb;
+$base-color-dark: #232323;
+
+.header {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
   height: 4em;
   width: 100%;
-  //background: brown;
+  position: fixed;
+  background: $base-color-dark;
+  transition: 0.5s all;
+}
+
+.isSticky {
+  background: $base-color-white;
+  height: 3em;
+}
+
+.isSticky .img_logo {
+  width: 2em;
+  height: 2em;
+}
+
+.isSticky .toggle label {
+  color: $base-color-dark;
+}
+
+.isSticky .auth {
+  width: 15%;
+
+  button {
+    border-radius: 10px;
+    padding: 4px;
+    border: 1px $base-color-dark solid;
+    background: #600707;
+    color: $base-color-white;
+  }
 }
 
 .logo {
@@ -14,6 +45,7 @@ header {
 .img_logo {
   width: 3em;
   height: 3em;
+  transition: 0.5s all;
 }
 
 .toggle {
@@ -22,8 +54,9 @@ header {
   }
 
   label {
-    color: #000000;
+    color: $base-color-white;
     position: relative;
+    transition: 0.5s all;
   }
 
   input[type="checkbox"] + label::before {
@@ -31,12 +64,13 @@ header {
     display: block;
     height: 18px;
     width: 45px;
-    border: 1px solid black;
+    border: 1px solid $base-color-dark;
     border-radius: 9px;
     position: absolute;
     top: 0px;
     left: -65px;
     background: #600707;
+    transition: 0.5s all;
   }
 
   input[type="checkbox"] + label::after {
@@ -44,7 +78,7 @@ header {
     display: block;
     height: 30px;
     width: 30px;
-    border: 1px solid #0022ff;
+    border: 1px solid $base-color-dark;
     border-radius: 50%;
     position: absolute;
     top: -6px;
@@ -66,16 +100,17 @@ header {
   justify-content: space-evenly;
   align-items: center;
   width: 20%;
+  transition: 0.5s all;
 
   button {
     border-radius: 10px;
     padding: 7px;
-    border: 1px #242424 solid;
+    border: 1px $base-color-dark solid;
     background: #600707;
   }
   button:hover {
-    background: blueviolet;
-    color: #600707;
+    background: #eeeeee;
+    color: $base-color-dark;
   }
 }
 

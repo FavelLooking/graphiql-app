@@ -1,19 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import styles from "./header.module.scss";
-//TODO: remove style.css
-import "../../style.css";
 
 export const Header: React.FC = () => {
-  //TODO: fix getById
+  const headerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleScroll = () => {
-      const navArea = document.getElementById("headerArea");
-      if (navArea) {
+      if (headerRef.current) {
         if (window.pageYOffset > 0) {
-          navArea.classList.add("is-sticky");
+          headerRef.current.classList.add(styles.isSticky);
         } else {
-          navArea.classList.remove("is-sticky");
+          headerRef.current.classList.remove(styles.isSticky);
         }
       }
     };
@@ -27,7 +25,7 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header id={"headerArea"}>
+      <header ref={headerRef} className={styles.header}>
         <div className={styles.logo}>
           <img className={styles.img_logo} src="/logo.jpg" alt="logo" />
         </div>
@@ -40,10 +38,7 @@ export const Header: React.FC = () => {
           <button>Sign Up</button>
         </div>
         <div className={styles.link}>
-          {
-            //TODO: add link to main page
-          }
-          <Link to="">Main Page</Link>
+          <Link to="/">Main Page</Link>
         </div>
       </header>
     </>
