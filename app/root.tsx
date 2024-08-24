@@ -5,9 +5,11 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import "./tailwind.css";
+import "./global.scss";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import { Header } from "./components/header/header";
+import { Footer } from "./components/footer/footer";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -21,7 +23,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <Provider store={store}>
         <body>
-          {children}
+          <Header />
+          <main>{children}</main>
+          <Footer />
           <ScrollRestoration />
           <Scripts />
         </body>
