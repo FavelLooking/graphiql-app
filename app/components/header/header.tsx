@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import styles from "./header.module.scss";
-import "../../style.css";
 
 export const Header: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);

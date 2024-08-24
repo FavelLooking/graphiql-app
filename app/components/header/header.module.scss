@@ -1,3 +1,6 @@
+$base-color-white: #bbb;
+$base-color-dark: #232323;
+
 .header {
   display: flex;
   flex-direction: row;
@@ -6,12 +9,12 @@
   height: 4em;
   width: 100%;
   position: fixed;
-  background: #232323;
+  background: $base-color-dark;
   transition: 0.5s all;
 }
 
 .isSticky {
-  background: #bbbbbb;
+  background: $base-color-white;
   height: 3em;
 }
 
@@ -21,7 +24,7 @@
 }
 
 .isSticky .toggle label {
-  color: #000000;
+  color: $base-color-dark;
 }
 
 .isSticky .auth {
@@ -30,9 +33,9 @@
   button {
     border-radius: 10px;
     padding: 4px;
-    border: 1px #242424 solid;
+    border: 1px $base-color-dark solid;
     background: #600707;
-    color: #bbbbbb;
+    color: $base-color-white;
   }
 }
 
@@ -51,7 +54,7 @@
   }
 
   label {
-    color: #bbbbbb;
+    color: $base-color-white;
     position: relative;
     transition: 0.5s all;
   }
@@ -61,7 +64,7 @@
     display: block;
     height: 18px;
     width: 45px;
-    border: 1px solid black;
+    border: 1px solid $base-color-dark;
     border-radius: 9px;
     position: absolute;
     top: 0px;
@@ -75,7 +78,7 @@
     display: block;
     height: 30px;
     width: 30px;
-    border: 1px solid #0022ff;
+    border: 1px solid $base-color-dark;
     border-radius: 50%;
     position: absolute;
     top: -6px;
@@ -102,12 +105,12 @@
   button {
     border-radius: 10px;
     padding: 7px;
-    border: 1px #242424 solid;
+    border: 1px $base-color-dark solid;
     background: #600707;
   }
   button:hover {
     background: #eeeeee;
-    color: #242424;
+    color: $base-color-dark;
   }
 }
 
