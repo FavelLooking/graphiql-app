@@ -43,9 +43,6 @@ export const Header: React.FC = () => {
             <button>Sign Up</button>
           </Link>
         </div>
-        <div className={styles.link}>
-          <Link to="/">Main Page</Link>
-        </div>
       </header>
     </>
   );
