@@ -34,8 +34,12 @@ export const Header: React.FC = () => {
           <label htmlFor="temp">Language Switch</label>
         </div>
         <div className={styles.auth}>
-          <button>Sign In</button>
-          <button>Sign Up</button>
+          <Link to="/auth?tab=login">
+            <button>Sign In</button>
+          </Link>
+          <Link to="/auth?tab=register">
+            <button>Sign Up</button>
+          </Link>
         </div>
         <div className={styles.link}>
           <Link to="/">Main Page</Link>
