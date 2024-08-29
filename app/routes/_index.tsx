@@ -10,7 +10,7 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <>
-      <main />
+      <h1>Welcome to REST/GraphiQL Client!</h1>
     </>
   );
 }
