@@ -27,7 +27,9 @@ export const Header: React.FC = () => {
     <>
       <header ref={headerRef} className={styles.header}>
         <div className={styles.logo}>
-          <img className={styles.img_logo} src="/logo.jpg" alt="logo" />
+          <Link to="/">
+            <img className={styles.img_logo} src="/logo.jpg" alt="logo" />
+          </Link>
         </div>
         <div className={styles.toggle}>
           <input type="checkbox" id="temp" />

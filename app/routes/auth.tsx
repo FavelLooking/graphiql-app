@@ -33,7 +33,6 @@ export default function AuthPage() {
       <div>
         {activeTab === "login" && (
           <div>
-            {/* Форма логина */}
             <h2>Login</h2>
             <form>
               <div>
@@ -50,7 +49,6 @@ export default function AuthPage() {
         )}
         {activeTab === "register" && (
           <div>
-            {/* Форма регистрации */}
             <h2>Registration</h2>
             <form>
               <div>
