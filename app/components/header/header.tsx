@@ -36,14 +36,26 @@ export const Header: React.FC = () => {
           <label htmlFor="temp">Language Switch</label>
         </div>
         <div className={styles.auth}>
-          <Link to="/auth?tab=login">
-            <button>Sign In</button>
-          </Link>
-          <Link to="/auth?tab=register">
-            <button>Sign Up</button>
-          </Link>
+          <LoginButton />
+          <RegisterButton />
         </div>
       </header>
     </>
+  );
+};
+
+export const LoginButton: React.FC = () => {
+  return (
+    <Link to="/auth?tab=login">
+      <button>Sign In</button>
+    </Link>
+  );
+};
+
+export const RegisterButton: React.FC = () => {
+  return (
+    <Link to="/auth?tab=register">
+      <button>Sign Up</button>
+    </Link>
   );
 };
