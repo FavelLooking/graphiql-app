@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useFormValidation } from "../../utils/useFormValidation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../utils/firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./auth.module.scss";
 
@@ -9,6 +10,7 @@ const RegisterForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   const { errors, isFormValid, isTouched, handleBlur } = useFormValidation(
     email,
@@ -26,6 +28,7 @@ const RegisterForm: React.FC = () => {
           password
         );
         console.log("User registered", userCredential.user);
+        navigate("/");
       } catch (error) {
         console.error("Error registering", error);
       }
