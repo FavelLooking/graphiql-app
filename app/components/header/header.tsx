@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./header.module.scss";
 import { auth } from "../../utils/firebaseConfig";
+import { RedirectButton } from "../button/RedirectButton";
 
 export const Header: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -46,32 +47,14 @@ export const Header: React.FC = () => {
         <div className={styles.auth}>
           {!user ? (
             <>
-              <LoginButton />
-              <RegisterButton />
+              <RedirectButton text="Sign In" redirectPath="/auth?tab=login" />
+              <RedirectButton text="Sign Up" redirectPath="/auth?tab=register" />
             </>
           ) : (
-            <button className={styles.auth_button} onClick={handleSignOut}>
-              Sign Out
-            </button>
+            <RedirectButton text="Sign Out" onClick={handleSignOut} />
           )}
         </div>
       </header>
     </>
-  );
-};
-
-export const LoginButton: React.FC = () => {
-  return (
-    <Link to="/auth?tab=login">
-      <button className={styles.auth_button}>Sign In</button>
-    </Link>
-  );
-};
-
-export const RegisterButton: React.FC = () => {
-  return (
-    <Link to="/auth?tab=register">
-      <button className={styles.auth_button}>Sign Up</button>
-    </Link>
   );
 };

@@ -1,8 +1,7 @@
 import React from "react";
 import styles from "./main.module.scss";
 import { auth } from "../../utils/firebaseConfig";
-import { Link } from "react-router-dom";
-import { LoginButton, RegisterButton } from "../header/header";
+import { RedirectButton } from "../button/RedirectButton";
 
 export const Main: React.FC = () => {
   const user = auth.currentUser;
@@ -13,20 +12,14 @@ export const Main: React.FC = () => {
       <div className={styles.buttons_container}>
         {!user ? (
           <>
-            <LoginButton />
-            <RegisterButton />
+            <RedirectButton text="Sign In" redirectPath="/auth?tab=login" />
+            <RedirectButton text="Sign Up" redirectPath="/auth?tab=register" />
           </>
         ) : (
           <>
-            <Link to="/rest">
-              <button className={styles.auth_button}>REST Client</button>
-            </Link>
-            <Link to="/graphql">
-              <button className={styles.auth_button}>GraphiQL Client</button>
-            </Link>
-            <Link to="/history">
-              <button className={styles.auth_button}>History</button>
-            </Link>
+            <RedirectButton text="REST Client" redirectPath="/rest" />
+            <RedirectButton text="GraphiQL" redirectPath="/graphql" />
+            <RedirectButton text="History" redirectPath="/history" />
           </>
         )}
       </div>

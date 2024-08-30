@@ -1,8 +1,5 @@
 @import "../../styles/colors";
 
-$base-color-white: #bbb;
-$base-color-dark: #232323;
-
 .header {
   display: flex;
   flex-direction: row;
@@ -96,16 +93,4 @@ $base-color-dark: #232323;
 
 .link {
   display: none;
-}
-
-.auth_button {
-  border-radius: 4px;
-  padding: 0.75rem;
-  border: 1px $base-color-dark solid;
-  background-color: $color-tab-default;
-  cursor: pointer;
-}
-.auth_button:hover {
-  background-color: $color-tab-hover;
-  color: $base-color-dark;
 }
