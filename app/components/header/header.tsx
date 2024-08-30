@@ -1,9 +1,17 @@
 import React, { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./header.module.scss";
+import { auth } from "../../utils/firebaseConfig";
 
 export const Header: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);
+  const user = auth.currentUser;
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await auth.signOut();
+    navigate("/auth");
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,8 +44,16 @@ export const Header: React.FC = () => {
           <label htmlFor="temp">Language Switch</label>
         </div>
         <div className={styles.auth}>
-          <LoginButton />
-          <RegisterButton />
+          {!user ? (
+            <>
+              <LoginButton />
+              <RegisterButton />
+            </>
+          ) : (
+            <button className={styles.auth_button} onClick={handleSignOut}>
+              Sign Out
+            </button>
+          )}
         </div>
       </header>
     </>
