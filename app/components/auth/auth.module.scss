@@ -9,8 +9,12 @@
   background-color: $color-background-light;
   border-radius: 8px;
   box-shadow: 0 2px 8px $color-box-shadow;
-  max-width: 400px;
+  max-width: 415px;
   margin: 2rem auto;
+
+  form {
+    width: 100%;
+  }
 }
 
 .tabButtons {
@@ -54,7 +58,7 @@
   }
 
   input {
-    width: 100%;
+    width: 95%;
     padding: 0.5rem;
     font-size: 1rem;
     border: 1px solid $color-border;
@@ -80,7 +84,20 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
 
-  &:hover {
+  &:not(.submitButtonDisabled):hover {
     background-color: $color-button-hover-bg;
   }
+}
+
+.submitButtonDisabled {
+  background-color: $color-button-bg-disabled;
+  color: $color-text-disabled;
+  cursor: not-allowed;
+}
+
+.error {
+  height: 14px;
+  width: 100%;
+  color: $color-text-error;
+  font-size: 12px;
 }
