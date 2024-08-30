@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { useFormValidation } from "../../utils/useFormValidation";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../utils/firebaseConfig";
+
 import styles from "./auth.module.scss";
 
 const RegisterForm: React.FC = () => {
@@ -13,10 +16,19 @@ const RegisterForm: React.FC = () => {
     confirmPassword
   );
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      // TODO: Register user
+      try {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        console.log("User registered", userCredential.user);
+      } catch (error) {
+        console.error("Error registering", error);
+      }
     }
   };
 

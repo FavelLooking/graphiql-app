@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { useFormValidation } from "../../utils/useFormValidation";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../utils/firebaseConfig";
+
 import styles from "./auth.module.scss";
 
 const LoginForm: React.FC = () => {
@@ -11,11 +14,19 @@ const LoginForm: React.FC = () => {
     password
   );
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      // TODO: Login user
-      console.log("Logged in");
+      try {
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        console.log("Logged in", userCredential.user);
+      } catch (error) {
+        console.error("Error logging in", error);
+      }
     }
   };
 
