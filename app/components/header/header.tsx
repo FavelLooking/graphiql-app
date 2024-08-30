@@ -47,7 +47,7 @@ export const Header: React.FC = () => {
 export const LoginButton: React.FC = () => {
   return (
     <Link to="/auth?tab=login">
-      <button>Sign In</button>
+      <button className={styles.auth_button}>Sign In</button>
     </Link>
   );
 };
@@ -55,7 +55,7 @@ export const LoginButton: React.FC = () => {
 export const RegisterButton: React.FC = () => {
   return (
     <Link to="/auth?tab=register">
-      <button>Sign Up</button>
+      <button className={styles.auth_button}>Sign Up</button>
     </Link>
   );
 };

@@ -92,20 +92,20 @@ $base-color-dark: #232323;
   align-items: center;
   width: 20%;
   transition: 0.5s all;
-
-  button {
-    border-radius: 4px;
-    padding: 0.75rem;
-    border: 1px $base-color-dark solid;
-    background-color: $color-tab-default;
-    cursor: pointer;
-  }
-  button:hover {
-    background-color: $color-tab-hover;
-    color: $base-color-dark;
-  }
 }
 
 .link {
   display: none;
+}
+
+.auth_button {
+  border-radius: 4px;
+  padding: 0.75rem;
+  border: 1px $base-color-dark solid;
+  background-color: $color-tab-default;
+  cursor: pointer;
+}
+.auth_button:hover {
+  background-color: $color-tab-hover;
+  color: $base-color-dark;
 }
