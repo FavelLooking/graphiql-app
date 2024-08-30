@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { useFormValidation } from "../../utils/useFormValidation";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../utils/firebaseConfig";
-
+import { useNavigate } from "react-router-dom";
 import styles from "./auth.module.scss";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const { errors, isFormValid, isTouched, handleBlur } = useFormValidation(
     email,
@@ -24,6 +25,7 @@ const LoginForm: React.FC = () => {
           password
         );
         console.log("Logged in", userCredential.user);
+        navigate("/");
       } catch (error) {
         console.error("Error logging in", error);
       }
