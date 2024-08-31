@@ -1,9 +1,18 @@
 import React, { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./header.module.scss";
+import { auth } from "../../utils/firebaseConfig";
+import { RedirectButton } from "../button/RedirectButton";
 
 export const Header: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);
+  const user = auth.currentUser;
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await auth.signOut();
+    navigate("/auth");
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,18 +36,23 @@ export const Header: React.FC = () => {
     <>
       <header ref={headerRef} className={styles.header}>
         <div className={styles.logo}>
-          <img className={styles.img_logo} src="/logo.jpg" alt="logo" />
+          <Link to="/">
+            <img className={styles.img_logo} src="/logo.jpg" alt="logo" />
+          </Link>
         </div>
         <div className={styles.toggle}>
           <input type="checkbox" id="temp" />
           <label htmlFor="temp">Language Switch</label>
         </div>
         <div className={styles.auth}>
-          <button>Sign In</button>
-          <button>Sign Up</button>
-        </div>
-        <div className={styles.link}>
-          <Link to="/">Main Page</Link>
+          {!user ? (
+            <>
+              <RedirectButton text="Sign In" redirectPath="/auth?tab=login" />
+              <RedirectButton text="Sign Up" redirectPath="/auth?tab=register" />
+            </>
+          ) : (
+            <RedirectButton text="Sign Out" onClick={handleSignOut} />
+          )}
         </div>
       </header>
     </>

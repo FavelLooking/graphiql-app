@@ -1,5 +1,4 @@
-$base-color-white: #bbb;
-$base-color-dark: #232323;
+@import "../../styles/colors";
 
 .header {
   display: flex;
@@ -29,17 +28,6 @@ $base-color-dark: #232323;
 
 .isSticky .auth {
   width: 15%;
-
-  button {
-    border-radius: 10px;
-    padding: 4px;
-    border: 1px $base-color-dark solid;
-    background: #600707;
-    color: $base-color-white;
-  }
-}
-
-.logo {
 }
 
 .img_logo {
@@ -101,17 +89,6 @@ $base-color-dark: #232323;
   align-items: center;
   width: 20%;
   transition: 0.5s all;
-
-  button {
-    border-radius: 10px;
-    padding: 7px;
-    border: 1px $base-color-dark solid;
-    background: #600707;
-  }
-  button:hover {
-    background: #eeeeee;
-    color: $base-color-dark;
-  }
 }
 
 .link {
