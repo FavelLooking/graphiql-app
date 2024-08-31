@@ -1,8 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { historySlice } from "./historySlice";
+import authReducer from "./authSlice";
 
 export const store = configureStore({
-  reducer: historySlice.reducer,
+  reducer: {
+    history: historySlice.reducer,
+    auth: authReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
