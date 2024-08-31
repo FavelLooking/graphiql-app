@@ -3,14 +3,18 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./header.module.scss";
 import { auth } from "../../utils/firebaseConfig";
 import { RedirectButton } from "../button/RedirectButton";
+import { useDispatch } from "react-redux";
+import { clearToken } from "../../store/authSlice";
 
 export const Header: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const user = auth.currentUser;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSignOut = async () => {
     await auth.signOut();
+    dispatch(clearToken());
     navigate("/auth");
   };
 
@@ -48,7 +52,10 @@ export const Header: React.FC = () => {
           {!user ? (
             <>
               <RedirectButton text="Sign In" redirectPath="/auth?tab=login" />
-              <RedirectButton text="Sign Up" redirectPath="/auth?tab=register" />
+              <RedirectButton
+                text="Sign Up"
+                redirectPath="/auth?tab=register"
+              />
             </>
           ) : (
             <RedirectButton text="Sign Out" onClick={handleSignOut} />
