@@ -1,19 +1,95 @@
-import React from "react";
+import React, { useState } from "react";
+import { useFormValidation } from "../../utils/useFormValidation";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../utils/firebaseConfig";
+import { useNavigate } from "react-router-dom";
 import styles from "./auth.module.scss";
+import Notification from "../notification/Notification";
 
 const LoginForm: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
+  const navigate = useNavigate();
+
+  const { errors, isFormValid, isTouched, handleBlur } = useFormValidation(
+    email,
+    password
+  );
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isFormValid) {
+      try {
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        console.log("Logged in", userCredential.user);
+        setNotification({
+          message: "Login successful! Redirecting...",
+          type: "success",
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } catch (error) {
+        console.error("Error logging in", error);
+        setNotification({
+          message: "Error logging in. Please check your credentials.",
+          type: "error",
+        });
+      }
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
+      {notification && (
+        <Notification message={notification.message} type={notification.type} />
+      )}
       <h2>Login</h2>
       <div className={styles.formGroup}>
         <label htmlFor="email">Email:</label>
-        <input id="email" type="email" name="email" required />
+        <input
+          id="email"
+          type="email"
+          name="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onBlur={() => handleBlur("email")}
+          required
+        />
+        {isTouched.email && errors.email && (
+          <span className={styles.error}>{errors.email}</span>
+        )}
       </div>
       <div className={styles.formGroup}>
         <label htmlFor="password">Password:</label>
-        <input id="password" type="password" name="password" required />
+        <input
+          id="password"
+          type="password"
+          name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onBlur={() => handleBlur("password")}
+          required
+        />
+        {isTouched.password && errors.password && (
+          <span className={styles.error}>{errors.password}</span>
+        )}
       </div>
-      <button type="submit" className={styles.submitButton}>
+      <button
+        type="submit"
+        className={`${styles.submitButton} ${
+          !isFormValid ? styles.submitButtonDisabled : ""
+        }`}
+        disabled={!isFormValid}
+      >
         Sign In
       </button>
     </form>
