@@ -1,26 +1,57 @@
 import React, { useState } from "react";
 import { useFormValidation } from "../../utils/useFormValidation";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../utils/firebaseConfig";
+import { useNavigate } from "react-router-dom";
 import styles from "./auth.module.scss";
+import Notification from "../notification/Notification";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
+  const navigate = useNavigate();
 
   const { errors, isFormValid, isTouched, handleBlur } = useFormValidation(
     email,
     password
   );
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      // TODO: Login user
-      console.log("Logged in");
+      try {
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        console.log("Logged in", userCredential.user);
+        setNotification({
+          message: "Login successful! Redirecting...",
+          type: "success",
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } catch (error) {
+        console.error("Error logging in", error);
+        setNotification({
+          message: "Error logging in. Please check your credentials.",
+          type: "error",
+        });
+      }
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
+      {notification && (
+        <Notification message={notification.message} type={notification.type} />
+      )}
       <h2>Login</h2>
       <div className={styles.formGroup}>
         <label htmlFor="email">Email:</label>

@@ -1,11 +1,20 @@
 import React, { useState } from "react";
-import { useFormValidation } from "../../utils/useFormValidation";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../utils/firebaseConfig";
+import { useNavigate } from "react-router-dom";
 import styles from "./auth.module.scss";
+import Notification from "../notification/Notification";
+import { useFormValidation } from "../../utils/useFormValidation";
 
 const RegisterForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
+  const navigate = useNavigate();
 
   const { errors, isFormValid, isTouched, handleBlur } = useFormValidation(
     email,
@@ -13,15 +22,38 @@ const RegisterForm: React.FC = () => {
     confirmPassword
   );
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      // TODO: Register user
+      try {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        console.log("User registered", userCredential.user);
+        setNotification({
+          message: "Registration successful! Redirecting...",
+          type: "success",
+        });
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      } catch (error) {
+        console.error("Error registering", error);
+        setNotification({
+          message: "Error registering. Please try again.",
+          type: "error",
+        });
+      }
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
+      {notification && (
+        <Notification message={notification.message} type={notification.type} />
+      )}
       <h2>Registration</h2>
       <div className={styles.formGroup}>
         <label htmlFor="email">Email:</label>
