@@ -13,3 +13,11 @@ main {
   margin-top: 4em;
   flex: 1;
 }
+
+.CodeMirror {
+  min-width: 30rem;
+  max-width: 45%;
+  padding: 1rem;
+  margin: 1rem;
+  height: fit-content;
+}

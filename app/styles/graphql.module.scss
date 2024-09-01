@@ -1,0 +1,23 @@
+.pageContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.responseContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  text-align: center;
+  padding: 1rem;
+}
+
+pre {
+  margin: 0;
+}
+
+form > label {
+  text-align: center;
+}
