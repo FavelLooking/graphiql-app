@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 
-// Define a generic type for the hook
 function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(() => {
     if (typeof window !== "undefined") {
