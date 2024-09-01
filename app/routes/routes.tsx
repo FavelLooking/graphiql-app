@@ -1,8 +1,14 @@
-import AuthPage from "./auth";
+import AuthPage from "./auth"; // Ensure this path is correct
+import ProtectedRoute from "../components/ProtectedRoute";
+import { Main } from "~/components/main/main";
 
 export const routes = [
   {
     path: "/auth",
-    element: <AuthPage />,
+    element: <ProtectedRoute element={<AuthPage />} redirectPath="/" />,
+  },
+  {
+    path: "/",
+    element: <Main />,
   },
 ];

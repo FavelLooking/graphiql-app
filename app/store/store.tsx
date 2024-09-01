@@ -1,13 +1,31 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { historySlice } from "./historySlice";
 import authReducer from "./authSlice";
 
-export const store = configureStore({
-  reducer: {
-    history: historySlice.reducer,
-    auth: authReducer,
-  },
-});
+const createStore = () => {
+  const preloadedState = {
+    auth: {
+      token:
+        typeof window !== "undefined" ? localStorage.getItem("token") : null,
+      email:
+        typeof window !== "undefined" ? localStorage.getItem("email") : null,
+      expiresIn:
+        typeof window !== "undefined"
+          ? Number(localStorage.getItem("expiresIn"))
+          : null,
+    },
+  };
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+  return configureStore({
+    reducer: {
+      auth: authReducer,
+    },
+    preloadedState,
+  });
+};
+
+const store = createStore();
+
+export type RootState = ReturnType<typeof store.getState>; // Add this line
+export type AppDispatch = typeof store.dispatch; // Optional: for dispatch types
+
+export default store;

@@ -7,7 +7,7 @@ import {
 } from "@remix-run/react";
 import "./global.scss";
 import { Provider } from "react-redux";
-import { store } from "./store/store";
+import store from "./store/store";
 import { Header } from "./components/header/header";
 import { Footer } from "./components/footer/footer";
 
