@@ -1,10 +1,13 @@
 {
-  "name": "",
+  "name": "graphiql-app",
   "private": true,
   "sideEffects": false,
   "type": "module",
   "scripts": {
     "build": "remix vite:build",
+    "test": "vitest",
+    "test:run-once": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "format:fix": "prettier --write .",
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
