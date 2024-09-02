@@ -1,3 +1,5 @@
+import { History } from "../components/history/History";
+
 export const loader = async () => {
   return null;
 };
@@ -5,7 +7,7 @@ export const loader = async () => {
 export default function HistoryPage() {
   return (
     <>
-      <h1>History</h1>
+      <History />
     </>
   );
 }
