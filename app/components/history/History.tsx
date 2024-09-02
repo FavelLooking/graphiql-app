@@ -3,6 +3,7 @@ import styles from "./history.module.scss";
 import { RedirectButton } from "../button/RedirectButton";
 
 export const History: React.FC = () => {
+  // TODO: set correct source of history when it's implemented
   const hasHistory = localStorage.getItem("requests") !== null;
 
   return (
