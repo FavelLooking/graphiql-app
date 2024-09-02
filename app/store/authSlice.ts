@@ -1,4 +1,11 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  PayloadAction,
+  ThunkAction,
+  AnyAction,
+  ThunkDispatch,
+} from "@reduxjs/toolkit";
+import { RootState } from "./store";
 
 interface AuthState {
   token: string | null;
@@ -47,5 +54,24 @@ const authSlice = createSlice({
 });
 
 export const { setToken, clearToken } = authSlice.actions;
+
+export const checkTokenExpiration =
+  (): ThunkAction<void, RootState, unknown, AnyAction> =>
+  (dispatch: ThunkDispatch<RootState, unknown, AnyAction>) => {
+    const expiresIn = localStorage.getItem("expiresIn");
+    if (expiresIn) {
+      const expirationTime = Number(expiresIn) * 1000 + Date.now();
+      const timeout = expirationTime - Date.now();
+      if (timeout > 0) {
+        setTimeout(() => {
+          dispatch(clearToken());
+          window.location.href = "/";
+        }, timeout);
+      } else {
+        dispatch(clearToken());
+        window.location.href = "/";
+      }
+    }
+  };
 
 export default authSlice.reducer;
