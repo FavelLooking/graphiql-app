@@ -1,0 +1,69 @@
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  UserCredential,
+} from "firebase/auth";
+import { auth } from "./firebaseConfig";
+import { setToken } from "../store/authSlice";
+import { Dispatch } from "redux";
+import { NavigateFunction } from "react-router-dom";
+
+export const handleAuthSubmit = async (
+  isLogin: boolean,
+  email: string,
+  password: string,
+  dispatch: Dispatch,
+  navigate?: NavigateFunction
+) => {
+  try {
+    let userCredential: UserCredential;
+    if (isLogin) {
+      // Login
+      userCredential = await signInWithEmailAndPassword(auth, email, password);
+    } else {
+      // Register
+      userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+    }
+
+    // Get ID token and expiration information
+    const idTokenResult = await userCredential.user.getIdTokenResult();
+
+    const token = idTokenResult.token;
+    const expiresIn = idTokenResult.expirationTime
+      ? new Date(idTokenResult.expirationTime).getTime() / 1000 -
+        Date.now() / 1000
+      : null;
+
+    // Save token and expiresIn to Redux
+    dispatch(
+      setToken({
+        token,
+        email: userCredential.user.email!,
+        expiresIn: expiresIn ? Math.floor(expiresIn) : 3600,
+      })
+    );
+
+    if (navigate) {
+      navigate("/");
+    }
+
+    return {
+      success: true,
+      message: isLogin
+        ? "Login successful! Redirecting..."
+        : "Registration successful! Redirecting...",
+    };
+  } catch (error) {
+    console.error(isLogin ? "Error logging in" : "Error registering", error);
+    return {
+      success: false,
+      message: isLogin
+        ? "Error logging in. Please check your credentials."
+        : "Error registering. Please try again.",
+    };
+  }
+};

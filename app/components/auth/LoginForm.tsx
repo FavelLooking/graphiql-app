@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useFormValidation } from "../../utils/useFormValidation";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../utils/firebaseConfig";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { handleAuthSubmit } from "../../utils/authHandler";
 import styles from "./auth.module.scss";
 import Notification from "../notification/Notification";
 
@@ -14,6 +14,7 @@ const LoginForm: React.FC = () => {
     type: "success" | "error";
   } | null>(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { errors, isFormValid, isTouched, handleBlur } = useFormValidation(
     email,
@@ -23,26 +24,15 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      try {
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        console.log("Logged in", userCredential.user);
-        setNotification({
-          message: "Login successful! Redirecting...",
-          type: "success",
-        });
+      const result = await handleAuthSubmit(true, email, password, dispatch);
+      setNotification({
+        message: result.message,
+        type: result.success ? "success" : "error",
+      });
+      if (result.success) {
         setTimeout(() => {
           navigate("/");
         }, 2000);
-      } catch (error) {
-        console.error("Error logging in", error);
-        setNotification({
-          message: "Error logging in. Please check your credentials.",
-          type: "error",
-        });
       }
     }
   };

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../utils/firebaseConfig";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { handleAuthSubmit } from "../../utils/authHandler";
 import styles from "./auth.module.scss";
 import Notification from "../notification/Notification";
 import { useFormValidation } from "../../utils/useFormValidation";
@@ -15,6 +15,7 @@ const RegisterForm: React.FC = () => {
     type: "success" | "error";
   } | null>(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { errors, isFormValid, isTouched, handleBlur } = useFormValidation(
     email,
@@ -25,26 +26,15 @@ const RegisterForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      try {
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        console.log("User registered", userCredential.user);
-        setNotification({
-          message: "Registration successful! Redirecting...",
-          type: "success",
-        });
+      const result = await handleAuthSubmit(false, email, password, dispatch);
+      setNotification({
+        message: result.message,
+        type: result.success ? "success" : "error",
+      });
+      if (result.success) {
         setTimeout(() => {
           navigate("/");
         }, 2000);
-      } catch (error) {
-        console.error("Error registering", error);
-        setNotification({
-          message: "Error registering. Please try again.",
-          type: "error",
-        });
       }
     }
   };

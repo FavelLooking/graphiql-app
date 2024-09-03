@@ -1,10 +1,11 @@
 import React from "react";
 import styles from "./main.module.scss";
-import { auth } from "../../utils/firebaseConfig";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 import { RedirectButton } from "../button/RedirectButton";
 
 export const Main: React.FC = () => {
-  const user = auth.currentUser;
+  const token = useSelector((state: RootState) => state.auth.token);
 
   return (
     <main className={styles.container}>
@@ -113,6 +114,10 @@ export const Main: React.FC = () => {
 
       <section className={styles.buttonsSection}>
         {!user ? (
+    <>
+      <h1>Welcome to REST/GraphiQL Client!</h1>
+      <div className={styles.buttons_container}>
+        {!token ? (
           <>
             <RedirectButton text="Sign In" redirectPath="/auth?tab=login" />
             <RedirectButton text="Sign Up" redirectPath="/auth?tab=register" />

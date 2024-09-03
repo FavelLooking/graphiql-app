@@ -5,11 +5,14 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import "./global.scss";
-import { Provider } from "react-redux";
-import { store } from "./store/store";
+import { Provider, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { checkTokenExpiration } from "./store/authSlice";
+import store, { AppDispatch } from "./store/store";
 import { Header } from "./components/header/header";
 import { Footer } from "./components/footer/footer";
+
+import "./global.scss";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -35,5 +38,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const dispatch: AppDispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkTokenExpiration());
+  }, [dispatch]);
+
   return <Outlet />;
 }
