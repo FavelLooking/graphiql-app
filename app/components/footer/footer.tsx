@@ -12,7 +12,12 @@ export const Footer: React.FC = () => {
         Task GH
       </Link>
       <h2>2024</h2>
-      <Link to={"https://rs.school/react/"} className={styles.link_course}>
+      <Link
+        to={"https://rs.school/"}
+        className={styles.link_course}
+        target="_blank"
+        rel="noreferrer"
+      >
         <img src="/rss-logo.svg" alt="course logo" />
       </Link>
     </footer>
