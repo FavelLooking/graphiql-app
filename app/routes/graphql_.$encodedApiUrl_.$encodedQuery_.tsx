@@ -2,7 +2,7 @@ import { json, LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import GraphQLClientPage from "./graphql";
 
-interface Params {
+interface IParams {
   encodedApiUrl?: string;
   encodedQuery?: string;
 }
@@ -10,7 +10,7 @@ interface Params {
 export const loader: LoaderFunction = async ({
   params,
 }: {
-  params: Params;
+  params: IParams;
 }) => {
   try {
     const { encodedApiUrl, encodedQuery } = params;

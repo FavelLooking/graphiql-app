@@ -5,13 +5,17 @@ import "codemirror-ssr/lib/codemirror.css";
 import "codemirror/theme/dracula.css";
 import CodeMirror from "codemirror";
 
-interface CodeEditorProps {
+interface ICodeEditorProps {
   onChange: (content: string) => void;
   onBlur?: () => void;
   value: string;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange, onBlur }) => {
+const CodeEditor: React.FC<ICodeEditorProps> = ({
+  value,
+  onChange,
+  onBlur,
+}) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const editorRef = useRef<CodeMirror.EditorFromTextArea | null>(null);
 

@@ -10,11 +10,11 @@ type GraphQlInput = {
   query: string;
 };
 
-interface ServerData {
+interface IServerData {
   serverData: unknown;
 }
 
-export default function GraphQLClientPage({ serverData }: ServerData) {
+export default function GraphQLClientPage({ serverData }: IServerData) {
   const navigate = useNavigate();
   const { register, handleSubmit, setValue, watch } = useForm<GraphQlInput>();
   const query = watch("query");
