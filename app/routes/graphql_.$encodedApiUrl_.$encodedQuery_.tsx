@@ -31,8 +31,7 @@ export const loader: LoaderFunction = async ({
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json();
-    console.log("Data from API:", data);
+    const data: unknown = await response.json();
     return json(data);
   } catch (error) {
     console.error("Loader error:", error);
@@ -42,6 +41,5 @@ export const loader: LoaderFunction = async ({
 
 export default function GraphQlRequestBodyPage() {
   const loaderData = useLoaderData();
-  console.log(loaderData);
   return <GraphQLClientPage serverData={loaderData} />;
 }

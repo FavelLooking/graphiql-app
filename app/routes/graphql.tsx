@@ -24,28 +24,10 @@ export default function GraphQLClientPage({ serverData }: ServerData) {
     setResponse(JSON.stringify(serverData, null, 2));
   }, [serverData]);
 
-  // async function makeGraphQLRequest(apiUrl: string, query: string) {
-  //   try {
-  //     console.log(apiUrl);
-  //     const res = await fetch(apiUrl, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ query }),
-  //     });
-  //     const json = await res.json();
-  //     setResponse(JSON.stringify(json, null, 2));
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }
-
   const onSubmit: SubmitHandler<GraphQlInput> = async (data) => {
     const encodedApiUrl = btoa(data.apiUrl);
     const encodedQuery = btoa(data.query);
     navigate(`/graphql/${encodedApiUrl}/${encodedQuery}`);
-    // await makeGraphQLRequest(data.apiUrl, data.query);
   };
 
   const handleEditorChange = useCallback(
@@ -60,20 +42,22 @@ export default function GraphQLClientPage({ serverData }: ServerData) {
     setValue("query", prettifiedQuery);
   }, [query, setValue]);
 
-  const handleBlur = useCallback(
-    () => {
-      // const apiUrl = watch("apiUrl");
-      // const query = watch("query");
-      // if (apiUrl && query) {
-      //   const encodedApiUrl = btoa(apiUrl);
-      //   const encodedQuery = btoa(query);
-      //   navigate(`/graphql/${encodedApiUrl}/${encodedQuery}`, { replace: true });
-      // }
-    },
-    [
-      /*watch, navigate*/
-    ],
-  );
+  const changeUrl = (encodedApiUrl: string, encodedQuery: string) => {
+    const state = {};
+    window.history.replaceState(
+      state,
+      "",
+      `/graphql/${encodedApiUrl}/${encodedQuery}`,
+    );
+  };
+
+  const handleBlur = useCallback(() => {
+    const apiUrl = watch("apiUrl");
+    const query = watch("query");
+    const encodedApiUrl = btoa(apiUrl ?? " ");
+    const encodedQuery = btoa(query ?? "");
+    changeUrl(encodedApiUrl, encodedQuery);
+  }, [watch]);
 
   return (
     <>
