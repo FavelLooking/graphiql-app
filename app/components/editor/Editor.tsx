@@ -7,38 +7,42 @@ import CodeMirror from "codemirror";
 
 interface CodeEditorProps {
   onChange: (content: string) => void;
+  onBlur?: () => void;
   value: string;
 }
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ value, onChange, onBlur }) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const editorRef = useRef<CodeMirror.EditorFromTextArea | null>(null);
 
   useEffect(() => {
-    if (textareaRef.current) {
-      const codemirror = factory();
-      implementPlaceholder(codemirror);
+    if (!textareaRef.current) return;
 
-      editorRef.current = codemirror.fromTextArea(textareaRef.current, {
-        placeholder: "Enter GraphQL query here...",
-        theme: "dracula",
-      });
+    const codemirror = factory();
+    implementPlaceholder(codemirror);
 
-      const handleChange = () => {
-        const value = editorRef.current?.getValue() || "";
-        onChange(value);
-      };
+    editorRef.current = codemirror.fromTextArea(textareaRef.current, {
+      placeholder: "Enter GraphQL query here...",
+      theme: "dracula",
+    });
 
-      editorRef.current.on("change", handleChange);
+    const handleChange = () => {
+      const editorValue = editorRef.current?.getValue() || "";
+      onChange(editorValue);
+    };
 
-      return () => {
-        editorRef.current?.toTextArea();
-      };
-    }
-  }, [onChange]);
+    editorRef.current.on("change", handleChange);
+    editorRef.current.on("blur", onBlur || (() => {}));
+
+    return () => {
+      editorRef.current?.off("change", handleChange);
+      editorRef.current?.off("blur", onBlur || (() => {}));
+      editorRef.current?.toTextArea();
+    };
+  }, [onChange, onBlur]);
 
   useEffect(() => {
-    if (editorRef.current) {
+    if (editorRef.current && editorRef.current.getValue() !== value) {
       editorRef.current.setValue(value || "");
     }
   }, [value]);

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { prettifyQuery } from "../utils/prettifyQuery";
 import CodeEditor from "../components/editor/Editor";
@@ -10,50 +10,70 @@ type GraphQlInput = {
   query: string;
 };
 
-export default function GraphQLClientPage() {
+interface ServerData {
+  serverData: unknown;
+}
+
+export default function GraphQLClientPage({ serverData }: ServerData) {
   const navigate = useNavigate();
   const { register, handleSubmit, setValue, watch } = useForm<GraphQlInput>();
   const query = watch("query");
-  const [prettifyValue, setPrettifyValue] = useState(query);
   const [response, setResponse] = useState("");
 
-  async function makeGraphQLRequest(apiUrl: string, query: string) {
-    try {
-      const endpointUrlBase64encoded = btoa(apiUrl);
-      const queryBase64encoded = btoa(query);
-      const linkCoding = `/graphql/${endpointUrlBase64encoded}/${queryBase64encoded}`;
-      const response = await fetch(linkCoding, {
-        method: "POST",
-      });
-      const json = await response.json();
-      console.log(json);
-      const stringifyJson = JSON.stringify(json, null, 2);
-      setResponse(stringifyJson);
+  useEffect(() => {
+    setResponse(JSON.stringify(serverData, null, 2));
+  }, [serverData]);
 
-      navigate(linkCoding);
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  // async function makeGraphQLRequest(apiUrl: string, query: string) {
+  //   try {
+  //     console.log(apiUrl);
+  //     const res = await fetch(apiUrl, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ query }),
+  //     });
+  //     const json = await res.json();
+  //     setResponse(JSON.stringify(json, null, 2));
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }
 
   const onSubmit: SubmitHandler<GraphQlInput> = async (data) => {
-    makeGraphQLRequest(data.apiUrl, data.query);
+    const encodedApiUrl = btoa(data.apiUrl);
+    const encodedQuery = btoa(data.query);
+    navigate(`/graphql/${encodedApiUrl}/${encodedQuery}`);
+    // await makeGraphQLRequest(data.apiUrl, data.query);
   };
 
   const handleEditorChange = useCallback(
     (content: string) => {
       setValue("query", content);
-      setPrettifyValue(content);
     },
     [setValue],
   );
 
-  const handlePrettify = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+  const handlePrettify = useCallback(() => {
     const prettifiedQuery = prettifyQuery(query);
-    setPrettifyValue(prettifiedQuery);
     setValue("query", prettifiedQuery);
-  };
+  }, [query, setValue]);
+
+  const handleBlur = useCallback(
+    () => {
+      // const apiUrl = watch("apiUrl");
+      // const query = watch("query");
+      // if (apiUrl && query) {
+      //   const encodedApiUrl = btoa(apiUrl);
+      //   const encodedQuery = btoa(query);
+      //   navigate(`/graphql/${encodedApiUrl}/${encodedQuery}`, { replace: true });
+      // }
+    },
+    [
+      /*watch, navigate*/
+    ],
+  );
 
   return (
     <>
@@ -61,19 +81,24 @@ export default function GraphQLClientPage() {
       <div className={styles.pageContainer}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="apiUrl">
-            Endpoint URL:{" "}
+            Endpoint URL:
             <input
               {...register("apiUrl")}
               id="apiUrl"
               type="text"
               placeholder="please, enter URL"
+              onBlur={handleBlur}
             />
-            <button type="submit">SUBMIT</button>
-            <button type="button" onClick={handlePrettify}>
-              Prettify
-            </button>
           </label>
-          <CodeEditor onChange={handleEditorChange} value={prettifyValue} />
+          <button type="submit">SUBMIT</button>
+          <button type="button" onClick={handlePrettify}>
+            Prettify
+          </button>
+          <CodeEditor
+            onChange={handleEditorChange}
+            value={query}
+            onBlur={handleBlur}
+          />
         </form>
         <div className={styles.responseContainer}>
           <h2>Response</h2>
