@@ -4,6 +4,8 @@ import { prettifyQuery } from "../utils/prettifyQuery";
 import CodeEditor from "../components/editor/Editor";
 import { useNavigate } from "@remix-run/react";
 import styles from "../styles/graphql.module.scss";
+import { buildClientSchema, getIntrospectionQuery } from "graphql";
+import { createGraphiQLFetcher } from "@graphiql/toolkit";
 
 type GraphQlInput = {
   apiUrl: string;
@@ -52,9 +54,12 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
     );
   };
 
-  const fillSdlUrl = (apiUrl: string) => {
-    setValue("sdlUrl", `${apiUrl}?sdl`);
-  };
+  const fillSdlUrl = useCallback(
+    (apiUrl: string) => {
+      setValue("sdlUrl", `${apiUrl}?sdl`);
+    },
+    [setValue],
+  );
 
   const handleBlur = useCallback(() => {
     const apiUrl = watch("apiUrl");
@@ -64,6 +69,23 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
     changeUrl(encodedApiUrl, encodedQuery);
     fillSdlUrl(apiUrl);
   }, [watch, fillSdlUrl]);
+
+  const makeDocumentation = async () => {
+    const introspectionResult = await fetchGraphSchema();
+    await buildClientSchema(introspectionResult.data);
+  };
+
+  const fetchGraphSchema = async () => {
+    const sdlUrl = watch("sdlUrl");
+    const fetcher = createGraphiQLFetcher({
+      url: sdlUrl,
+    });
+    const data = await fetcher({
+      query: getIntrospectionQuery(),
+      operationName: "IntrospectionQuery",
+    });
+    return data;
+  };
 
   return (
     <>
@@ -98,6 +120,9 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
             <button type="submit">SUBMIT</button>
             <button type="button" onClick={handlePrettify}>
               Prettify
+            </button>
+            <button type="button" onClick={makeDocumentation}>
+              Get SDL Scheme
             </button>
           </div>
           <div>
