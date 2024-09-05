@@ -8,6 +8,7 @@ import styles from "../styles/graphql.module.scss";
 type GraphQlInput = {
   apiUrl: string;
   query: string;
+  sdlUrl: string;
 };
 
 interface IServerData {
@@ -64,25 +65,43 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
       <h1 className={styles.title}>GraphQL Client</h1>
       <div className={styles.pageContainer}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="apiUrl">
-            Endpoint URL:
-            <input
-              {...register("apiUrl")}
-              id="apiUrl"
-              type="text"
-              placeholder="please, enter URL"
+          <div>
+            <label htmlFor="apiUrl">
+              Endpoint URL:
+              <input
+                {...register("apiUrl")}
+                id="apiUrl"
+                type="text"
+                placeholder="please, enter URL"
+                onBlur={handleBlur}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="sdlUrl">
+              SDL URL:
+              <input
+                {...register("sdlUrl")}
+                id="sdlUrl"
+                type="text"
+                placeholder="please, enter URL"
+                onBlur={handleBlur}
+              />
+            </label>
+          </div>
+          <div>
+            <button type="submit">SUBMIT</button>
+            <button type="button" onClick={handlePrettify}>
+              Prettify
+            </button>
+          </div>
+          <div>
+            <CodeEditor
+              onChange={handleEditorChange}
+              value={query}
               onBlur={handleBlur}
             />
-          </label>
-          <button type="submit">SUBMIT</button>
-          <button type="button" onClick={handlePrettify}>
-            Prettify
-          </button>
-          <CodeEditor
-            onChange={handleEditorChange}
-            value={query}
-            onBlur={handleBlur}
-          />
+          </div>
         </form>
         <div className={styles.responseContainer}>
           <h2>Response</h2>
