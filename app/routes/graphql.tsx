@@ -63,7 +63,7 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
     const encodedQuery = btoa(query ?? "");
     changeUrl(encodedApiUrl, encodedQuery);
     fillSdlUrl(apiUrl);
-  }, [watch]);
+  }, [watch, fillSdlUrl]);
 
   return (
     <>
