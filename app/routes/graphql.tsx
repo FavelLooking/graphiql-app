@@ -52,9 +52,12 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
     );
   };
 
-  const fillSdlUrl = (apiUrl: string) => {
-    setValue("sdlUrl", `${apiUrl}?sdl`);
-  };
+  const fillSdlUrl = useCallback(
+    (apiUrl: string) => {
+      setValue("sdlUrl", `${apiUrl}?sdl`);
+    },
+    [setValue],
+  );
 
   const handleBlur = useCallback(() => {
     const apiUrl = watch("apiUrl");
