@@ -1,0 +1,69 @@
+.apiMethod {
+  margin-bottom: 10px;
+  padding: 5px;
+  width: 100%;
+}
+
+.inputText {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.headerRow {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.headerKey,
+.headerValue {
+  width: 45%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.addButton {
+  padding: 8px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.addButton:hover {
+  background-color: #218838;
+}
+
+.bodySection {
+  margin-bottom: 20px;
+}
+
+.submitButton {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.submitButton:hover {
+  background-color: #0056b3;
+}
+
+.responseSection {
+  margin-top: 20px;
+}
+
+.response {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 4px;
+  overflow-x: auto;
+}
