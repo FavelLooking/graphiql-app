@@ -23,12 +23,31 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
   const query = watch("query");
   const [response, setResponse] = useState("");
   const [headers, setHeaders] = useState([{ key: "", value: "" }]);
-
   const [schemaString, setSchemaString] = useState<string>("");
 
   useEffect(() => {
     setResponse(JSON.stringify(serverData, null, 2));
   }, [serverData]);
+
+  const changeUrl = useCallback(
+    (encodedApiUrl: string, encodedQuery: string) => {
+      const headerParams = headers
+        .filter(({ key, value }) => key || value)
+        .map(({ key, value }) => `${key}=${value}`)
+        .join("&");
+      const url = `/graphql/${encodedApiUrl}${encodedQuery ? `/${encodedQuery}` : ""}${headerParams ? `?${headerParams}` : ""}`;
+      window.history.replaceState({}, "", url);
+    },
+    [headers],
+  );
+
+  useEffect(() => {
+    const apiUrl = watch("apiUrl");
+    const query = watch("query");
+    const encodedApiUrl = btoa(apiUrl ?? " ");
+    const encodedQuery = btoa(query ?? "");
+    changeUrl(encodedApiUrl, encodedQuery);
+  }, [headers, watch, changeUrl]);
 
   const onSubmit: SubmitHandler<GraphQlInput> = async (data) => {
     const encodedApiUrl = btoa(data.apiUrl);
@@ -48,15 +67,6 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
     setValue("query", prettifiedQuery);
   }, [query, setValue]);
 
-  const changeUrl = (encodedApiUrl: string, encodedQuery: string) => {
-    const state = {};
-    window.history.replaceState(
-      state,
-      "",
-      `/graphql/${encodedApiUrl}/${encodedQuery}`,
-    );
-  };
-
   const fillSdlUrl = useCallback(
     (apiUrl: string) => {
       setValue("sdlUrl", `${apiUrl}?sdl`);
@@ -71,7 +81,7 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
     const encodedQuery = btoa(query ?? "");
     changeUrl(encodedApiUrl, encodedQuery);
     fillSdlUrl(apiUrl);
-  }, [watch, fillSdlUrl]);
+  }, [watch, fillSdlUrl, changeUrl]);
 
   const makeDocumentation = async () => {
     try {
@@ -98,9 +108,11 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
   };
 
   const handleHeaderChange = (index: number, key: string, value: string) => {
-    const updatedHeaders = [...headers];
-    updatedHeaders[index] = { key, value };
-    setHeaders(updatedHeaders);
+    setHeaders((prevHeaders) => {
+      const updatedHeaders = [...prevHeaders];
+      updatedHeaders[index] = { key, value };
+      return updatedHeaders;
+    });
   };
 
   const handleAddHeader = () => {
