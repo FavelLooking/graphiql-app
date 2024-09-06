@@ -13,7 +13,7 @@ export const handleAuthSubmit = async (
   email: string,
   password: string,
   dispatch: Dispatch,
-  navigate?: NavigateFunction
+  navigate?: NavigateFunction,
 ) => {
   try {
     let userCredential: UserCredential;
@@ -25,7 +25,7 @@ export const handleAuthSubmit = async (
       userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
     }
 
@@ -44,7 +44,7 @@ export const handleAuthSubmit = async (
         token,
         email: userCredential.user.email!,
         expiresIn: expiresIn ? Math.floor(expiresIn) : 3600,
-      })
+      }),
     );
 
     if (navigate) {

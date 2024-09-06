@@ -1,3 +1,3 @@
 export interface IRestComponentProps {
-    serverData?: unknown;
+  serverData?: unknown;
 }
