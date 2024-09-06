@@ -20,7 +20,7 @@ const RegisterForm: React.FC = () => {
   const { errors, isFormValid, isTouched, handleBlur } = useFormValidation(
     email,
     password,
-    confirmPassword
+    confirmPassword,
   );
 
   const handleSubmit = async (e: React.FormEvent) => {

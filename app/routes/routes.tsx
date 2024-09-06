@@ -1,4 +1,4 @@
-import AuthPage from "./auth"; 
+import AuthPage from "./auth";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { Main } from "~/components/main/main";
 

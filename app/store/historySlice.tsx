@@ -10,14 +10,15 @@ const initialState: HistoryState = {
   ],
 };
 
-export const historySlice = createSlice({
-  name: "historyState",
+const historySlice = createSlice({
+  name: "history",
   initialState: initialState,
   reducers: {
-    saveQuery: (state, action: PayloadAction<RouteQuery>) => {
+    addQuery: (state, action: PayloadAction<RouteQuery>) => {
       state.queries.push(action.payload);
     },
   },
 });
 
-export const { saveQuery } = historySlice.actions;
+export const { addQuery } = historySlice.actions;
+export default historySlice.reducer;
