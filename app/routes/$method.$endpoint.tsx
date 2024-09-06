@@ -45,7 +45,7 @@ export const loader = async ({
 
   const response = await fetch(finalUrl, fetchOptions);
   if (!response.ok) {
-    throw new Response("Failed to fetch data", { status: response.status });
+    return json({ data: response.statusText, response: response.status });
   }
 
   const data = await response.json();
