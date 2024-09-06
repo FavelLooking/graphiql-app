@@ -161,9 +161,11 @@ export const RestComponent: React.FC<RestComponentProps> = ({ serverData }) => {
 
             {serverData && (
                 <div className={styles.responseSection}>
+                    <h3>Status</h3>
+                    <h5>Response status: {serverData.response}</h5>
                     <h3>Response:</h3>
                     <pre className={styles.response}>
-            {JSON.stringify(serverData, null, 2)}
+            {JSON.stringify(serverData.data, null, 2)}
           </pre>
                 </div>
             )}
