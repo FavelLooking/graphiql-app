@@ -4,10 +4,13 @@ import { prettifyQuery } from "../utils/prettifyQuery";
 import CodeEditor from "../components/editor/Editor";
 import { useNavigate } from "@remix-run/react";
 import styles from "../styles/graphql.module.scss";
+import { buildClientSchema, getIntrospectionQuery, printSchema } from "graphql";
+import { createGraphiQLFetcher } from "@graphiql/toolkit";
 
 type GraphQlInput = {
   apiUrl: string;
   query: string;
+  sdlUrl: string;
 };
 
 interface IServerData {
@@ -19,6 +22,8 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
   const { register, handleSubmit, setValue, watch } = useForm<GraphQlInput>();
   const query = watch("query");
   const [response, setResponse] = useState("");
+
+  const [schemaString, setSchemaString] = useState<string>("");
 
   useEffect(() => {
     setResponse(JSON.stringify(serverData, null, 2));
@@ -51,47 +56,124 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
     );
   };
 
+  const fillSdlUrl = useCallback(
+    (apiUrl: string) => {
+      setValue("sdlUrl", `${apiUrl}?sdl`);
+    },
+    [setValue],
+  );
+
   const handleBlur = useCallback(() => {
     const apiUrl = watch("apiUrl");
     const query = watch("query");
     const encodedApiUrl = btoa(apiUrl ?? " ");
     const encodedQuery = btoa(query ?? "");
     changeUrl(encodedApiUrl, encodedQuery);
-  }, [watch]);
+    fillSdlUrl(apiUrl);
+  }, [watch, fillSdlUrl]);
+
+  const makeDocumentation = async () => {
+    try {
+      const introspectionResult = await fetchGraphSchema();
+      const schema = buildClientSchema(introspectionResult.data);
+
+      const schemaSDL = printSchema(schema);
+      setSchemaString(schemaSDL);
+    } catch (error) {
+      console.error("Error fetching schema:", error);
+    }
+  };
+
+  const fetchGraphSchema = async () => {
+    const sdlUrl = watch("sdlUrl");
+    const fetcher = createGraphiQLFetcher({
+      url: sdlUrl,
+    });
+    const data = await fetcher({
+      query: getIntrospectionQuery(),
+      operationName: "IntrospectionQuery",
+    });
+    return data;
+  };
 
   return (
     <>
       <h1 className={styles.title}>GraphQL Client</h1>
       <div className={styles.pageContainer}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="apiUrl">
-            Endpoint URL:
-            <input
-              {...register("apiUrl")}
-              id="apiUrl"
-              type="text"
-              placeholder="please, enter URL"
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className={styles.formContainer}
+        >
+          <div>
+            <label htmlFor="apiUrl">
+              Endpoint URL:
+              <input
+                {...register("apiUrl")}
+                id="apiUrl"
+                type="text"
+                placeholder="please, enter URL"
+                className={styles.inputField}
+                onBlur={handleBlur}
+              />
+            </label>
+          </div>
+          <div>
+            <label htmlFor="sdlUrl">
+              SDL URL:
+              <input
+                {...register("sdlUrl")}
+                id="sdlUrl"
+                type="text"
+                placeholder="please, enter URL"
+                className={styles.inputField}
+                onBlur={handleBlur}
+              />
+            </label>
+          </div>
+          <div>
+            <button type="submit" className={styles.button}>
+              SUBMIT
+            </button>
+            <button
+              type="button"
+              className={styles.button}
+              onClick={handlePrettify}
+            >
+              Prettify
+            </button>
+            <button
+              type="button"
+              className={styles.button}
+              onClick={makeDocumentation}
+            >
+              Get SDL Scheme
+            </button>
+          </div>
+          <div>
+            <CodeEditor
+              onChange={handleEditorChange}
+              value={query}
               onBlur={handleBlur}
             />
-          </label>
-          <button type="submit">SUBMIT</button>
-          <button type="button" onClick={handlePrettify}>
-            Prettify
-          </button>
-          <CodeEditor
-            onChange={handleEditorChange}
-            value={query}
-            onBlur={handleBlur}
-          />
+          </div>
         </form>
         <div className={styles.responseContainer}>
-          <h2>Response</h2>
+          <h2 className={styles.responseTitle}>Response</h2>
           {response ? (
-            <pre>{response}</pre>
+            <pre className={styles.preContainer}>{response}</pre>
           ) : (
-            <pre>Right, now it&apos;s empty</pre>
+            <pre className={styles.preContainer}>
+              Right, now it&apos;s empty
+            </pre>
           )}
         </div>
+
+        {schemaString ? (
+          <div className={styles.documentationContainer}>
+            <h2 className={styles.documentationTitle}>Documentation</h2>
+            <pre className={styles.preContainer}>{schemaString}</pre>
+          </div>
+        ) : null}
       </div>
     </>
   );
