@@ -10,7 +10,7 @@ interface ValidationErrors {
 export const useFormValidation = (
   email: string,
   password: string,
-  confirmPassword?: string
+  confirmPassword?: string,
 ) => {
   const [errors, setErrors] = useState<ValidationErrors>({
     email: "",
@@ -42,7 +42,7 @@ export const useFormValidation = (
     setIsFormValid(
       !emailError &&
         !passwordError &&
-        (!confirmPasswordError || !confirmPassword)
+        (!confirmPasswordError || !confirmPassword),
     );
   }, [email, password, confirmPassword]);
 

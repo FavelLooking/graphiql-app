@@ -18,7 +18,7 @@ const LoginForm: React.FC = () => {
 
   const { errors, isFormValid, isTouched, handleBlur } = useFormValidation(
     email,
-    password
+    password,
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
