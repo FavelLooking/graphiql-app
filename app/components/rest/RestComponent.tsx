@@ -6,12 +6,9 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/theme/isotope.css";
 import styles from "./restcomponent.module.scss";
 import { saveQuery } from "~/store/historySlice";
+import {IRestComponentProps} from "~/components/rest/RestComponent.interface";
 
-interface RestComponentProps {
-    serverData?: unknown;
-}
-
-export const RestComponent: React.FC<RestComponentProps> = ({ serverData }) => {
+export const RestComponent: React.FC<IRestComponentProps> = ({ serverData }) => {
     const [processUrl, setProcessUrl] = useState<string>("");
     const [selectedMethod, setSelectedMethod] = useState<string>("GET");
     const [endpoint, setEndpoint] = useState<string>("");
