@@ -1,6 +1,6 @@
 import { json, LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import GraphQLClientPage from "./graphql";
+import GraphQLClientPage from "../components/graphql/GraphQlComponent";
 
 interface IParams {
   encodedApiUrl?: string;
