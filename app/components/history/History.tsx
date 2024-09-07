@@ -1,15 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./history.module.scss";
 import { RedirectButton } from "../button/RedirectButton";
+import { useSelector } from "react-redux";
+import { RootState } from "~/store/store";
+import { Link } from "@remix-run/react";
 
 export const History: React.FC = () => {
-  // TODO: set correct source of history when it's implemented
-  const hasHistory = localStorage.getItem("requests") !== null;
+  const [links, setLinks] = useState<{ query: string; route: string }[]>([
+    { query: "", route: "" },
+  ]);
+  const items = useSelector((state: RootState) => state.history.queries);
+
+  useEffect(() => {
+    setLinks(items);
+  }, [items]);
+
+  const truncateText = (text: string, maxLength: number) => {
+    return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+  };
 
   return (
     <div className={styles.historyContainer}>
       <h1>History</h1>
-      {!hasHistory ? (
+      {!links ? (
         <div className={styles.emptyHistory}>
           <p>You haven&#39;t executed any requests yet.</p>
           <p>It&#39;s empty here. Try those options:</p>
@@ -19,7 +32,18 @@ export const History: React.FC = () => {
           </div>
         </div>
       ) : (
-        <p>History of your requests will be displayed here.</p>
+        <div className={styles.linkContainer}>
+          {links.map((link, index) => (
+            <Link
+              to={`../${link.route}`}
+              key={index}
+              className={styles.queryLinks}
+            >
+              <span>{link.query.toUpperCase()}</span>
+              <span>{truncateText(link.route, 30)}</span>
+            </Link>
+          ))}
+        </div>
       )}
     </div>
   );
