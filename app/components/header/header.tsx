@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { clearToken } from "../../store/authSlice";
 import { auth } from "../../utils/firebaseConfig";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export const Header: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -45,10 +46,7 @@ export const Header: React.FC = () => {
           <img className={styles.img_logo} src="/logo.jpg" alt="logo" />
         </Link>
       </div>
-      <div className={styles.toggle}>
-        <input type="checkbox" id="temp" />
-        <label htmlFor="temp">Language Switch</label>
-      </div>
+      <LanguageSwitcher />
       <div className={styles.auth}>
         {!token ? (
           <>
