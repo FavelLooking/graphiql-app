@@ -6,6 +6,8 @@ import { useNavigate } from "@remix-run/react";
 import styles from "../styles/graphql.module.scss";
 import { buildClientSchema, getIntrospectionQuery, printSchema } from "graphql";
 import { createGraphiQLFetcher } from "@graphiql/toolkit";
+import { useDispatch } from "react-redux";
+import { saveQuery } from "~/store/historySlice";
 
 type GraphQlInput = {
   apiUrl: string;
@@ -23,6 +25,7 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
   const query = watch("query");
   const [response, setResponse] = useState("");
   const [headers, setHeaders] = useState([{ key: "", value: "" }]);
+  const dispatch = useDispatch();
   const [schemaString, setSchemaString] = useState<string>("");
 
   useEffect(() => {
@@ -52,9 +55,10 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
   const onSubmit: SubmitHandler<GraphQlInput> = async (data) => {
     const encodedApiUrl = btoa(data.apiUrl);
     const encodedQuery = btoa(data.query);
-    navigate(`/graphql/${encodedApiUrl}/${encodedQuery}`);
+    const url = `/graphql/${encodedApiUrl}/${encodedQuery}`;
+    dispatch(saveQuery({ query: "graphql", route: url }));
+    navigate(url);
   };
-
   const handleEditorChange = useCallback(
     (content: string) => {
       setValue("query", content);

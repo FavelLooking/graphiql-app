@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
+import historyReducer from "./historySlice";
 
 const createStore = () => {
   const preloadedState = {
@@ -18,6 +19,7 @@ const createStore = () => {
   return configureStore({
     reducer: {
       auth: authReducer,
+      history: historyReducer,
     },
     preloadedState,
   });

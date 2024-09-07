@@ -1,11 +1,9 @@
-export const loader = async () => {
-  return null;
-};
+import { RestComponent } from "~/components/rest/RestComponent";
 
 export default function RestClientPage() {
   return (
-    <>
-      <h1>Rest Client</h1>
-    </>
+    <div>
+      <RestComponent />
+    </div>
   );
 }
