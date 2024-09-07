@@ -7,7 +7,7 @@ import styles from "../styles/graphql.module.scss";
 import { buildClientSchema, getIntrospectionQuery, printSchema } from "graphql";
 import { createGraphiQLFetcher } from "@graphiql/toolkit";
 import { useDispatch } from "react-redux";
-import { addQuery } from "~/store/historySlice";
+import { saveQuery } from "~/store/historySlice";
 
 type GraphQlInput = {
   apiUrl: string;
@@ -36,7 +36,7 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
     const encodedApiUrl = btoa(data.apiUrl);
     const encodedQuery = btoa(data.query);
     const url = `/graphql/${encodedApiUrl}/${encodedQuery}`;
-    dispatch(addQuery({ query: "graphql", route: url }));
+    dispatch(saveQuery({ query: "graphql", route: url }));
     navigate(url);
   };
   const handleEditorChange = useCallback(
