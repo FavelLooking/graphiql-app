@@ -27,6 +27,7 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
   const [headers, setHeaders] = useState([{ key: "", value: "" }]);
   const dispatch = useDispatch();
   const [schemaString, setSchemaString] = useState<string>("");
+  const [targetUrl, setUrl] = useState("");
 
   useEffect(() => {
     setResponse(JSON.stringify(serverData, null, 2));
@@ -39,6 +40,7 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
         .map(({ key, value }) => `${key}=${value}`)
         .join("&");
       const url = `/graphql/${encodedApiUrl}${encodedQuery ? `/${encodedQuery}` : ""}${headerParams ? `?${headerParams}` : ""}`;
+      setUrl(url);
       window.history.replaceState({}, "", url);
     },
     [headers],
@@ -52,12 +54,9 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
     changeUrl(encodedApiUrl, encodedQuery);
   }, [headers, watch, changeUrl]);
 
-  const onSubmit: SubmitHandler<GraphQlInput> = async (data) => {
-    const encodedApiUrl = btoa(data.apiUrl);
-    const encodedQuery = btoa(data.query);
-    const url = `/graphql/${encodedApiUrl}/${encodedQuery}`;
-    dispatch(saveQuery({ query: "graphql", route: url }));
-    navigate(url);
+  const onSubmit: SubmitHandler<GraphQlInput> = async () => {
+    dispatch(saveQuery({ query: "graphql", route: targetUrl }));
+    navigate(targetUrl);
   };
   const handleEditorChange = useCallback(
     (content: string) => {
