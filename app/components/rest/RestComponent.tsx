@@ -14,7 +14,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
   const [selectedMethod, setSelectedMethod] = useState<string>("GET");
   const [endpoint, setEndpoint] = useState<string>("");
   const [headers, setHeaders] = useState<Array<{ key: string; value: string }>>(
-    [{ key: "", value: "" }],
+    [{ key: "", value: "" }]
   );
   const [variables, setVariables] = useState<
     Array<{ key: string; value: string }>
@@ -55,7 +55,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
       setBodyContent(encodedBodyContent);
       setHeaders(newHeaders.length > 0 ? newHeaders : [{ key: "", value: "" }]);
       setVariables(
-        newVariables.length > 0 ? newVariables : [{ key: "", value: "" }],
+        newVariables.length > 0 ? newVariables : [{ key: "", value: "" }]
       );
     }
   }, [location]);
@@ -91,13 +91,13 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
         .filter((header) => header.key)
         .map(
           (header) =>
-            `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`,
+            `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`
         ),
       ...variables
         .filter((variable) => variable.key)
         .map(
           (variable) =>
-            `${encodeURIComponent(variable.key)}=${encodeURIComponent(variable.value)}`,
+            `${encodeURIComponent(variable.key)}=${encodeURIComponent(variable.value)}`
         ),
     ].join("&");
 
@@ -119,13 +119,13 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
         .filter((header) => header.key)
         .map(
           (header) =>
-            `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`,
+            `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`
         ),
       ...variables
         .filter((variable) => variable.key)
         .map(
           (variable) =>
-            `${encodeURIComponent(variable.key)}=${encodeURIComponent(variable.value)}`,
+            `${encodeURIComponent(variable.key)}=${encodeURIComponent(variable.value)}`
         ),
     ].join("&");
 
