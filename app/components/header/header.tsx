@@ -7,11 +7,13 @@ import { RootState } from "../../store/store";
 import { clearToken } from "../../store/authSlice";
 import { auth } from "../../utils/firebaseConfig";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 export const Header: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const token = useSelector((state: RootState) => state.auth.token);
 
@@ -50,11 +52,17 @@ export const Header: React.FC = () => {
       <div className={styles.auth}>
         {!token ? (
           <>
-            <RedirectButton text="Sign In" redirectPath="/auth?tab=login" />
-            <RedirectButton text="Sign Up" redirectPath="/auth?tab=register" />
+            <RedirectButton
+              text={t("buttons.signIn")}
+              redirectPath="/auth?tab=login"
+            />
+            <RedirectButton
+              text={t("buttons.signUp")}
+              redirectPath="/auth?tab=register"
+            />
           </>
         ) : (
-          <RedirectButton text="Sign Out" onClick={handleSignOut} />
+          <RedirectButton text={t("buttons.signOut")} onClick={handleSignOut} />
         )}
       </div>
     </header>
