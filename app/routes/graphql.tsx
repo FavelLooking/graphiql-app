@@ -24,13 +24,33 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
   const { register, handleSubmit, setValue, watch } = useForm<GraphQlInput>();
   const query = watch("query");
   const [response, setResponse] = useState("");
+  const [headers, setHeaders] = useState([{ key: "", value: "" }]);
   const dispatch = useDispatch();
-
   const [schemaString, setSchemaString] = useState<string>("");
 
   useEffect(() => {
     setResponse(JSON.stringify(serverData, null, 2));
   }, [serverData]);
+
+  const changeUrl = useCallback(
+    (encodedApiUrl: string, encodedQuery: string) => {
+      const headerParams = headers
+        .filter(({ key, value }) => key || value)
+        .map(({ key, value }) => `${key}=${value}`)
+        .join("&");
+      const url = `/graphql/${encodedApiUrl}${encodedQuery ? `/${encodedQuery}` : ""}${headerParams ? `?${headerParams}` : ""}`;
+      window.history.replaceState({}, "", url);
+    },
+    [headers],
+  );
+
+  useEffect(() => {
+    const apiUrl = watch("apiUrl");
+    const query = watch("query");
+    const encodedApiUrl = btoa(apiUrl ?? " ");
+    const encodedQuery = btoa(query ?? "");
+    changeUrl(encodedApiUrl, encodedQuery);
+  }, [headers, watch, changeUrl]);
 
   const onSubmit: SubmitHandler<GraphQlInput> = async (data) => {
     const encodedApiUrl = btoa(data.apiUrl);
@@ -51,15 +71,6 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
     setValue("query", prettifiedQuery);
   }, [query, setValue]);
 
-  const changeUrl = (encodedApiUrl: string, encodedQuery: string) => {
-    const state = {};
-    window.history.replaceState(
-      state,
-      "",
-      `/graphql/${encodedApiUrl}/${encodedQuery}`,
-    );
-  };
-
   const fillSdlUrl = useCallback(
     (apiUrl: string) => {
       setValue("sdlUrl", `${apiUrl}?sdl`);
@@ -74,7 +85,7 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
     const encodedQuery = btoa(query ?? "");
     changeUrl(encodedApiUrl, encodedQuery);
     fillSdlUrl(apiUrl);
-  }, [watch, fillSdlUrl]);
+  }, [watch, fillSdlUrl, changeUrl]);
 
   const makeDocumentation = async () => {
     try {
@@ -100,6 +111,18 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
     return data;
   };
 
+  const handleHeaderChange = (index: number, key: string, value: string) => {
+    setHeaders((prevHeaders) => {
+      const updatedHeaders = [...prevHeaders];
+      updatedHeaders[index] = { key, value };
+      return updatedHeaders;
+    });
+  };
+
+  const handleAddHeader = () => {
+    setHeaders([...headers, { key: "", value: "" }]);
+  };
+
   return (
     <>
       <h1 className={styles.title}>GraphQL Client</h1>
@@ -108,31 +131,59 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
           onSubmit={handleSubmit(onSubmit)}
           className={styles.formContainer}
         >
+          <label htmlFor="apiUrl">
+            <b>Endpoint URL:</b>
+            <input
+              {...register("apiUrl")}
+              id="apiUrl"
+              type="text"
+              placeholder="please, enter URL"
+              className={styles.inputField}
+              onBlur={handleBlur}
+            />
+          </label>
+          <label htmlFor="sdlUrl">
+            <b>SDL URL:</b>
+            <input
+              {...register("sdlUrl")}
+              id="sdlUrl"
+              type="text"
+              placeholder="please, enter URL"
+              className={styles.inputField}
+              onBlur={handleBlur}
+            />
+          </label>
           <div>
-            <label htmlFor="apiUrl">
-              Endpoint URL:
-              <input
-                {...register("apiUrl")}
-                id="apiUrl"
-                type="text"
-                placeholder="please, enter URL"
-                className={styles.inputField}
-                onBlur={handleBlur}
-              />
-            </label>
-          </div>
-          <div>
-            <label htmlFor="sdlUrl">
-              SDL URL:
-              <input
-                {...register("sdlUrl")}
-                id="sdlUrl"
-                type="text"
-                placeholder="please, enter URL"
-                className={styles.inputField}
-                onBlur={handleBlur}
-              />
-            </label>
+            <h4 className={styles.headerTitle}>Headers:</h4>
+            {headers.map((header, index) => (
+              <div key={index} className={styles.headerContainer}>
+                <input
+                  type="text"
+                  placeholder="Header Key"
+                  value={header.key}
+                  onChange={(e) =>
+                    handleHeaderChange(index, e.target.value, header.value)
+                  }
+                  className={styles.headerKey}
+                />
+                <input
+                  type="text"
+                  placeholder="Header Value"
+                  value={header.value}
+                  onChange={(e) =>
+                    handleHeaderChange(index, header.key, e.target.value)
+                  }
+                  className={styles.headerValue}
+                />
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={handleAddHeader}
+              className={styles.button}
+            >
+              Add Header
+            </button>
           </div>
           <div>
             <button type="submit" className={styles.button}>
@@ -166,9 +217,7 @@ export default function GraphQLClientPage({ serverData }: IServerData) {
           {response ? (
             <pre className={styles.preContainer}>{response}</pre>
           ) : (
-            <pre className={styles.preContainer}>
-              Right, now it&apos;s empty
-            </pre>
+            <pre className={styles.preContainer}>Right now it&apos;s empty</pre>
           )}
         </div>
 
