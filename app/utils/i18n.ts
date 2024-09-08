@@ -8,9 +8,15 @@ const resources = {
         signIn: "Sign In",
         signUp: "Sign Up",
         signOut: "Sign Out",
+        login: "Login",
+        register: "Registration",
         restClient: "REST Client",
         graphiqlClient: "GraphiQL Client",
         history: "History",
+      },
+      titles: {
+        email: "Email",
+        password: "Password",
       },
       welcome: "Welcome to REST/GraphiQL Client!",
       description:
@@ -53,9 +59,15 @@ const resources = {
         signIn: "Войти",
         signUp: "Зарегистрироваться",
         signOut: "Выйти",
+        login: "Авторизация",
+        register: "Регистрация",
         restClient: "REST клиент",
         graphiqlClient: "GraphiQL клиент",
         history: "История",
+      },
+      titles: {
+        email: "Электронная почта",
+        password: "Пароль",
       },
       welcome: "Добро пожаловать в REST/GraphiQL клиент!",
       description:
