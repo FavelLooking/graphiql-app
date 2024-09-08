@@ -17,6 +17,7 @@ const resources = {
       titles: {
         email: "Email",
         password: "Password",
+        confirmPassword: "Confirm Password",
       },
       welcome: "Welcome to REST/GraphiQL Client!",
       description:
@@ -68,6 +69,7 @@ const resources = {
       titles: {
         email: "Электронная почта",
         password: "Пароль",
+        confirmPassword: "Подтверждение пароля",
       },
       welcome: "Добро пожаловать в REST/GraphiQL клиент!",
       description:
