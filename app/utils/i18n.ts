@@ -31,6 +31,7 @@ const resources = {
         graphql: "GraphQL Client",
         response: "Response",
         documentation: "Documentation",
+        taskGH: "Task GH",
       },
       placeholders: {
         apiEndpoint: "API Endpoint",
@@ -114,6 +115,7 @@ const resources = {
         graphql: "GraphQL клиент",
         response: "Ответ",
         documentation: "Документация",
+        taskGH: "Задача на GH",
       },
       placeholders: {
         apiEndpoint: "API Endpoint",
