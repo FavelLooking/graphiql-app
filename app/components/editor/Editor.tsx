@@ -35,7 +35,7 @@ const CodeEditor: React.FC<ICodeEditorProps> = ({
     implementPlaceholder(codemirror);
 
     editorRef.current = codemirror.fromTextArea(textareaRef.current, {
-      placeholder: "Enter GraphQL query here...",
+      placeholder: "Enter GraphQL query...",
       theme: "dracula",
       mode: "graphql",
     });
@@ -99,6 +99,7 @@ const CodeEditor: React.FC<ICodeEditorProps> = ({
 
       <button
         onClick={() => setIsVariablesVisible((prev) => !prev)}
+        type="button"
         className={styles.variableButton}
       >
         {isVariablesVisible ? "Hide Variables" : "Show Variables"}

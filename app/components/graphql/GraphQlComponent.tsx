@@ -13,6 +13,7 @@ type GraphQlInput = {
   apiUrl: string;
   query: string;
   sdlUrl: string;
+  variables?: string;
 };
 
 interface IServerData {
@@ -34,12 +35,12 @@ export default function GraphQlComponent({ serverData }: IServerData) {
   }, [serverData]);
 
   const changeUrl = useCallback(
-    (encodedApiUrl: string, encodedQuery: string) => {
+    (encodedApiUrl: string, encodedRequestBody: string) => {
       const headerParams = headers
         .filter(({ key, value }) => key || value)
         .map(({ key, value }) => `${key}=${value}`)
         .join("&");
-      const url = `/graphql/${encodedApiUrl}${encodedQuery ? `/${encodedQuery}` : ""}${headerParams ? `?${headerParams}` : ""}`;
+      const url = `/graphql/${encodedApiUrl}/${encodedRequestBody}${headerParams ? `?${headerParams}` : ""}`;
       setUrl(url);
       window.history.replaceState({}, "", url);
     },
@@ -49,9 +50,13 @@ export default function GraphQlComponent({ serverData }: IServerData) {
   useEffect(() => {
     const apiUrl = watch("apiUrl");
     const query = watch("query");
+    const variables = watch("variables");
+
+    const requestBody = JSON.stringify({ query, variables });
+    const encodedRequestBody = btoa(requestBody);
+
     const encodedApiUrl = btoa(apiUrl ?? " ");
-    const encodedQuery = btoa(query ?? "");
-    changeUrl(encodedApiUrl, encodedQuery);
+    changeUrl(encodedApiUrl, encodedRequestBody);
   }, [headers, watch, changeUrl]);
 
   const onSubmit: SubmitHandler<GraphQlInput> = async () => {
@@ -80,9 +85,13 @@ export default function GraphQlComponent({ serverData }: IServerData) {
   const handleBlur = useCallback(() => {
     const apiUrl = watch("apiUrl");
     const query = watch("query");
+    const variables = watch("variables");
+
+    const requestBody = JSON.stringify({ query, variables });
+    const encodedRequestBody = btoa(requestBody);
+
     const encodedApiUrl = btoa(apiUrl ?? " ");
-    const encodedQuery = btoa(query ?? "");
-    changeUrl(encodedApiUrl, encodedQuery);
+    changeUrl(encodedApiUrl, encodedRequestBody);
     fillSdlUrl(apiUrl);
   }, [watch, fillSdlUrl, changeUrl]);
 
@@ -121,6 +130,13 @@ export default function GraphQlComponent({ serverData }: IServerData) {
   const handleAddHeader = () => {
     setHeaders([...headers, { key: "", value: "" }]);
   };
+
+  const handleVariablesChange = useCallback(
+    (variables: string) => {
+      setValue("variables", variables);
+    },
+    [setValue],
+  );
 
   return (
     <>
@@ -208,6 +224,8 @@ export default function GraphQlComponent({ serverData }: IServerData) {
               onChange={handleEditorChange}
               value={query}
               onBlur={handleBlur}
+              onVariablesChange={handleVariablesChange}
+              variablesValue={watch("variables") ?? ""}
             />
           </div>
         </form>
