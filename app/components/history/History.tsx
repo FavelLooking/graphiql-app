@@ -6,9 +6,7 @@ import { RootState } from "~/store/store";
 import { Link } from "@remix-run/react";
 
 export const History: React.FC = () => {
-  const [links, setLinks] = useState<{ query: string; route: string }[]>([
-    { query: "", route: "" },
-  ]);
+  const [links, setLinks] = useState<{ query: string; route: string }[]>([]);
   const items = useSelector((state: RootState) => state.history.queries);
 
   useEffect(() => {
@@ -22,7 +20,7 @@ export const History: React.FC = () => {
   return (
     <div className={styles.historyContainer}>
       <h1>History</h1>
-      {!links ? (
+      {links.length === 0 ? (
         <div className={styles.emptyHistory}>
           <p>You haven&#39;t executed any requests yet.</p>
           <p>It&#39;s empty here. Try those options:</p>
