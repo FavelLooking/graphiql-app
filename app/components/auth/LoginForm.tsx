@@ -26,7 +26,7 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      const result = await handleAuthSubmit(true, email, password, dispatch);
+      const result = await handleAuthSubmit(true, email, password, dispatch, t);
       setNotification({
         message: result.message,
         type: result.success ? "success" : "error",

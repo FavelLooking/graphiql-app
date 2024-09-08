@@ -19,6 +19,12 @@ const resources = {
         password: "Password",
         confirmPassword: "Confirm Password",
       },
+      notifications: {
+        successLogin: "Login successful! Redirecting...",
+        successRegister: "Registration successful! Redirecting...",
+        errorLogin: "Error logging in. Please check your credentials.",
+        errorRegister: "Error registering. Please try again.",
+      },
       welcome: "Welcome to REST/GraphiQL Client!",
       description:
         "This project is developed as part of the RS School React course andaims to provide a client interface for interacting with RESTful and GraphQL APIs.",
@@ -73,6 +79,12 @@ const resources = {
         email: "Электронная почта",
         password: "Пароль",
         confirmPassword: "Подтверждение пароля",
+      },
+      notifications: {
+        successLogin: "Логин успешно выполнен! Перенаправление...",
+        successRegister: "Регистрация успешна! Перенаправление...",
+        errorLogin: "Ошибка входа. Пожалуйста, проверьте ваши учетные данные.",
+        errorRegister: "Ошибка регистрации. Пожалуйста, попробуйте еще раз.",
       },
       welcome: "Добро пожаловать в REST/GraphiQL клиент!",
       description:
