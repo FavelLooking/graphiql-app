@@ -4,6 +4,7 @@ import implementPlaceholder from "codemirror-ssr/addon/display/placeholder";
 import "codemirror-ssr/lib/codemirror.css";
 import "codemirror/theme/dracula.css";
 import CodeMirror from "codemirror";
+import { useTranslation } from "react-i18next";
 
 interface ICodeEditorProps {
   onChange: (content: string) => void;
@@ -18,6 +19,7 @@ const CodeEditor: React.FC<ICodeEditorProps> = ({
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const editorRef = useRef<CodeMirror.EditorFromTextArea | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!textareaRef.current) return;
@@ -26,7 +28,7 @@ const CodeEditor: React.FC<ICodeEditorProps> = ({
     implementPlaceholder(codemirror);
 
     editorRef.current = codemirror.fromTextArea(textareaRef.current, {
-      placeholder: "Enter GraphQL query here...",
+      placeholder: t("placeholders.enterGraphQLQuery"),
       theme: "dracula",
     });
 
@@ -43,7 +45,7 @@ const CodeEditor: React.FC<ICodeEditorProps> = ({
       editorRef.current?.off("blur", onBlur || (() => {}));
       editorRef.current?.toTextArea();
     };
-  }, [onChange, onBlur]);
+  }, [t, onChange, onBlur]);
 
   useEffect(() => {
     if (editorRef.current && editorRef.current.getValue() !== value) {
