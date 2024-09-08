@@ -52,6 +52,9 @@ const resources = {
       cource: "About the Course",
       courseInfo:
         'This project is part of the <a href="https://rs.school/courses/reactjs" target="_blank" rel="noreferrer">RS School React course</a>, which covers modern React development practices, including routing, client-side state management, and API interactions.',
+      emptyHistoryP1: "You haven't executed any requests yet.",
+      emptyHistoryP2: "It's empty here. Try those options:",
+      historyDescription: "History of your requests will be displayed here.",
     },
   },
   ru: {
@@ -103,6 +106,9 @@ const resources = {
       cource: "Курс",
       courseInfo:
         'Этот проект является частью <a href="https://rs.school/courses/reactjs" target="_blank" rel="noreferrer">курса RS School React</a>, который охватывает современные практики разработки на React, включая маршрутизацию, управление состоянием на стороне клиента и взаимодействие с API.',
+      emptyHistoryP1: "Вы еще не выполнили никаких запросов.",
+      emptyHistoryP2: "Тут пусто. Попробуйте эти варианты:",
+      historyDescription: "История ваших запросов будет отображаться здесь.",
     },
   },
 };
