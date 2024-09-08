@@ -13,11 +13,22 @@ const resources = {
         restClient: "REST Client",
         graphiqlClient: "GraphiQL Client",
         history: "History",
+        addVariable: "Add Variable",
+        addHeader: "Add Header",
+        sendRequest: "Send Request",
       },
       titles: {
         email: "Email",
         password: "Password",
         confirmPassword: "Confirm Password",
+        variable: "Variable",
+        header: "Header",
+        body: "Body",
+      },
+      placeholders: {
+        apiEndpoint: "API Endpoint",
+        variableKey: "Variable Key",
+        headerKey: "Header Key",
       },
       notifications: {
         successLogin: "Login successful! Redirecting...",
@@ -74,11 +85,22 @@ const resources = {
         restClient: "REST клиент",
         graphiqlClient: "GraphiQL клиент",
         history: "История",
+        addVariable: "Добавить переменную",
+        addHeader: "Добавить заголовок",
+        sendRequest: "Отправить запрос",
       },
       titles: {
         email: "Электронная почта",
         password: "Пароль",
         confirmPassword: "Подтверждение пароля",
+        variable: "Переменная",
+        header: "Заголовок",
+        body: "Тело",
+      },
+      placeholders: {
+        apiEndpoint: "API Endpoint",
+        variableKey: "Variable Key",
+        headerKey: "Header Key",
       },
       notifications: {
         successLogin: "Логин успешно выполнен! Перенаправление...",
@@ -125,6 +147,7 @@ const resources = {
   },
 };
 
+// eslint-disable-next-line import/no-named-as-default-member
 i18n.use(initReactI18next).init({
   resources,
   lng: "en",

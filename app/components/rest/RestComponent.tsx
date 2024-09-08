@@ -7,6 +7,7 @@ import "codemirror/theme/isotope.css";
 import styles from "./restcomponent.module.scss";
 import { saveQuery } from "~/store/historySlice";
 import { IRestComponentProps } from "~/components/rest/RestComponent.interface";
+import { useTranslation } from "react-i18next";
 
 export const RestComponent: React.FC<IRestComponentProps> = ({
   serverData,
@@ -24,6 +25,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const decodeBase64 = (str: string) => {
     return decodeURIComponent(escape(atob(str)));
@@ -173,7 +175,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
       />
 
       <div>
-        <h4>Variables</h4>
+        <h4>{t("titles.variable")}</h4>
         {variables.map((variable, index) => (
           <div key={index} className={styles.variableRow}>
             <input
@@ -203,12 +205,12 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
           onClick={handleAddVariable}
           className={styles.addButton}
         >
-          Add Variable
+          {t("buttons.addVariable")}
         </button>
       </div>
 
       <div>
-        <h4>Headers</h4>
+        <h4>{t("titles.header")}</h4>
         {headers.map((header, index) => (
           <div key={index} className={styles.headerRow}>
             <input
@@ -238,13 +240,13 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
           onClick={handleAddHeader}
           className={styles.addButton}
         >
-          Add Header
+          {t("buttons.addHeader")}
         </button>
       </div>
 
       {selectedMethod !== "GET" && (
         <div className={styles.bodySection}>
-          <h4>Body</h4>
+          <h4>{t("titles.body")}</h4>
           <CodeMirror
             value={bodyContent}
             options={{
@@ -268,7 +270,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
         onClick={handleSubmit}
         className={styles.submitButton}
       >
-        Send Request
+        {t("buttons.sendRequest")}
       </button>
 
       {serverData && (
