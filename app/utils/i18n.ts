@@ -49,7 +49,7 @@ const resources = {
       },
       welcome: "Welcome to REST/GraphiQL Client!",
       description:
-        "This project is developed as part of the RS School React course andaims to provide a client interface for interacting with RESTful and GraphQL APIs.",
+        "This project is developed as part of the RS School React course and aims to provide a client interface for interacting with RESTful and GraphQL APIs.",
       developers: "About the Developers",
       github: "GitHub Profile",
       maxim: "Maxim",
@@ -148,10 +148,10 @@ const resources = {
       pavel: "Павел",
       pavelTasks: {
         task1:
-          "Разработал график клиента, включая редактирование запросов и разделы ответа.",
+          "Разработал GraphQL клиент, включая редактирование запросов и разделы ответа.",
         task2: "Реализовал проводник для запросов GraphQL.",
         task3:
-          " Добавил поддержку управления заголовками и переменными в графике клиента.",
+          " Добавил поддержку управления заголовками и переменными для GraphQL клиента.",
       },
       fedor: "Федор",
       fedorTasks: {
