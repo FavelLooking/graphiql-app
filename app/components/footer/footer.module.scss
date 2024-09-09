@@ -9,6 +9,11 @@
 
 .link_GH {
   padding: 3px;
+  color: #eee;
+
+  &:visited {
+    color: #eee;
+  }
 }
 
 .link_GH:hover {
@@ -22,10 +27,10 @@
   width: 3em;
   height: 3em;
   padding: 10px;
+  border-radius: 30px;
+  padding: 2px;
 }
 
 .link_course:hover {
   background: #eeeeee;
-  border-radius: 30px;
-  padding: 5px;
 }

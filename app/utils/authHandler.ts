@@ -13,7 +13,8 @@ export const handleAuthSubmit = async (
   email: string,
   password: string,
   dispatch: Dispatch,
-  navigate?: NavigateFunction,
+  t: (key: string) => string,
+  navigate?: NavigateFunction
 ) => {
   try {
     let userCredential: UserCredential;
@@ -25,7 +26,7 @@ export const handleAuthSubmit = async (
       userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password,
+        password
       );
     }
 
@@ -44,7 +45,7 @@ export const handleAuthSubmit = async (
         token,
         email: userCredential.user.email!,
         expiresIn: expiresIn ? Math.floor(expiresIn) : 3600,
-      }),
+      })
     );
 
     if (navigate) {
@@ -54,16 +55,16 @@ export const handleAuthSubmit = async (
     return {
       success: true,
       message: isLogin
-        ? "Login successful! Redirecting..."
-        : "Registration successful! Redirecting...",
+        ? t("notifications.successLogin")
+        : t("notifications.successRegister"),
     };
   } catch (error) {
     console.error(isLogin ? "Error logging in" : "Error registering", error);
     return {
       success: false,
       message: isLogin
-        ? "Error logging in. Please check your credentials."
-        : "Error registering. Please try again.",
+        ? t("notifications.errorLogin")
+        : t("notifications.errorRegister"),
     };
   }
 };

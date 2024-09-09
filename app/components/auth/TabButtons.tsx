@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styles from "./auth.module.scss";
 
 interface TabButtonsProps {
@@ -9,6 +10,7 @@ interface TabButtonsProps {
 
 const TabButtons: React.FC<TabButtonsProps> = ({ activeTab, onTabChange }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleTabChange = (tab: "login" | "register") => {
     onTabChange(tab);
@@ -21,13 +23,13 @@ const TabButtons: React.FC<TabButtonsProps> = ({ activeTab, onTabChange }) => {
         onClick={() => handleTabChange("login")}
         className={`${styles.tabButton} ${activeTab === "login" ? styles.active : ""}`}
       >
-        Login
+        {t("buttons.login")}
       </button>
       <button
         onClick={() => handleTabChange("register")}
         className={`${styles.tabButton} ${activeTab === "register" ? styles.active : ""}`}
       >
-        Registration
+        {t("buttons.register")}
       </button>
     </div>
   );
