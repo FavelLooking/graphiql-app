@@ -1,11 +1,9 @@
-export const loader = async () => {
-  return null;
-};
+import GraphQlComponent from "~/components/graphql/GraphQlComponent";
 
 export default function GraphQLClientPage() {
   return (
-    <>
-      <h1>GraphQL Client</h1>
-    </>
+    <div>
+      <GraphQlComponent />
+    </div>
   );
 }

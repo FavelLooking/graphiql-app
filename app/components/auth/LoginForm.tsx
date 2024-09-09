@@ -3,18 +3,20 @@ import { useFormValidation } from "../../utils/useFormValidation";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { handleAuthSubmit } from "../../utils/authHandler";
+import { useTranslation } from "react-i18next";
 import styles from "./auth.module.scss";
 import Notification from "../notification/Notification";
 
 const LoginForm: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("tosterstudy@mail.com"); // Prefilled email
+  const [password, setPassword] = useState("toster123!"); // Prefilled password
   const [notification, setNotification] = useState<{
     message: string;
     type: "success" | "error";
   } | null>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const { errors, isFormValid, isTouched, handleBlur } = useFormValidation(
     email,
@@ -24,7 +26,7 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      const result = await handleAuthSubmit(true, email, password, dispatch);
+      const result = await handleAuthSubmit(true, email, password, dispatch, t);
       setNotification({
         message: result.message,
         type: result.success ? "success" : "error",
@@ -42,9 +44,9 @@ const LoginForm: React.FC = () => {
       {notification && (
         <Notification message={notification.message} type={notification.type} />
       )}
-      <h2>Login</h2>
+      <h2>{t("buttons.login")}</h2>
       <div className={styles.formGroup}>
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="email">{t("titles.email")}:</label>
         <input
           id="email"
           type="email"
@@ -59,7 +61,7 @@ const LoginForm: React.FC = () => {
         )}
       </div>
       <div className={styles.formGroup}>
-        <label htmlFor="password">Password:</label>
+        <label htmlFor="password">{t("titles.password")}:</label>
         <input
           id="password"
           type="password"
@@ -80,7 +82,7 @@ const LoginForm: React.FC = () => {
         }`}
         disabled={!isFormValid}
       >
-        Sign In
+        {t("buttons.signIn")}
       </button>
     </form>
   );

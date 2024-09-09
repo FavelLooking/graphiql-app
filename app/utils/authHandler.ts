@@ -13,6 +13,7 @@ export const handleAuthSubmit = async (
   email: string,
   password: string,
   dispatch: Dispatch,
+  t: (key: string) => string,
   navigate?: NavigateFunction
 ) => {
   try {
@@ -54,16 +55,16 @@ export const handleAuthSubmit = async (
     return {
       success: true,
       message: isLogin
-        ? "Login successful! Redirecting..."
-        : "Registration successful! Redirecting...",
+        ? t("notifications.successLogin")
+        : t("notifications.successRegister"),
     };
   } catch (error) {
     console.error(isLogin ? "Error logging in" : "Error registering", error);
     return {
       success: false,
       message: isLogin
-        ? "Error logging in. Please check your credentials."
-        : "Error registering. Please try again.",
+        ? t("notifications.errorLogin")
+        : t("notifications.errorRegister"),
     };
   }
 };

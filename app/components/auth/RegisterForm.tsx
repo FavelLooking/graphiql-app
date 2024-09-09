@@ -5,6 +5,7 @@ import { handleAuthSubmit } from "../../utils/authHandler";
 import styles from "./auth.module.scss";
 import Notification from "../notification/Notification";
 import { useFormValidation } from "../../utils/useFormValidation";
+import { useTranslation } from "react-i18next";
 
 const RegisterForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -16,6 +17,7 @@ const RegisterForm: React.FC = () => {
   } | null>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const { errors, isFormValid, isTouched, handleBlur } = useFormValidation(
     email,
@@ -26,7 +28,13 @@ const RegisterForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      const result = await handleAuthSubmit(false, email, password, dispatch);
+      const result = await handleAuthSubmit(
+        false,
+        email,
+        password,
+        dispatch,
+        t
+      );
       setNotification({
         message: result.message,
         type: result.success ? "success" : "error",
@@ -44,9 +52,9 @@ const RegisterForm: React.FC = () => {
       {notification && (
         <Notification message={notification.message} type={notification.type} />
       )}
-      <h2>Registration</h2>
+      <h2>{t("buttons.register")}</h2>
       <div className={styles.formGroup}>
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="email">{t("titles.email")}:</label>
         <input
           id="email"
           type="email"
@@ -61,7 +69,7 @@ const RegisterForm: React.FC = () => {
         )}
       </div>
       <div className={styles.formGroup}>
-        <label htmlFor="password">Password:</label>
+        <label htmlFor="password">{t("titles.password")}:</label>
         <input
           id="password"
           type="password"
@@ -76,7 +84,7 @@ const RegisterForm: React.FC = () => {
         )}
       </div>
       <div className={styles.formGroup}>
-        <label htmlFor="confirmPassword">Confirm Password:</label>
+        <label htmlFor="confirmPassword">{t("titles.confirmPassword")}:</label>
         <input
           id="confirmPassword"
           type="password"
@@ -97,7 +105,7 @@ const RegisterForm: React.FC = () => {
         }`}
         disabled={!isFormValid}
       >
-        Sign Up
+        {t("buttons.signUp")}
       </button>
     </form>
   );
