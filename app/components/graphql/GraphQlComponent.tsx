@@ -31,6 +31,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
   const navigate = useNavigate();
   const { register, handleSubmit, setValue, watch } = useForm<GraphQlInput>();
   const query = watch("query");
+  const sdlUrl = watch("sdlUrl");
   const [response, setResponse] = useState("");
   const [headers, setHeaders] = useState([{ key: "", value: "" }]);
   const dispatch = useDispatch();
@@ -40,6 +41,10 @@ export default function GraphQlComponent({ serverData }: IServerData) {
 
   const showToast = (toastText: string) => {
     toast(toastText);
+  };
+
+  const showWarnToast = (toastText: string) => {
+    toast.warn(toastText);
   };
 
   useEffect(() => {
@@ -131,9 +136,10 @@ export default function GraphQlComponent({ serverData }: IServerData) {
 
       const schemaSDL = printSchema(schema);
       setSchemaString(schemaSDL);
+      showToast("Cool! Here is you scheme");
     } catch (error) {
-      console.error("Error fetching schema:", error);
-      showToast("Error fetching schema");
+      console.error("Error fetching scheme:", error);
+      showWarnToast("Error fetching scheme");
     }
   };
 
@@ -245,6 +251,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
               type="button"
               className={styles.button}
               onClick={makeDocumentation}
+              disabled={!sdlUrl}
             >
               {t("buttons.getSDLScheme")}
             </button>
