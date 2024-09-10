@@ -9,6 +9,7 @@ import { createGraphiQLFetcher } from "@graphiql/toolkit";
 import { useDispatch } from "react-redux";
 import { saveQuery } from "~/store/historySlice";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 type GraphQlInput = {
   apiUrl: string;
@@ -37,6 +38,10 @@ export default function GraphQlComponent({ serverData }: IServerData) {
   const [targetUrl, setUrl] = useState("");
   const { t } = useTranslation();
 
+  const showToast = (toastText: string) => {
+    toast(toastText);
+  };
+
   useEffect(() => {
     setResponse(JSON.stringify(serverData, null, 2));
   }, [serverData]);
@@ -51,7 +56,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
       setUrl(url);
       window.history.replaceState({}, "", url);
     },
-    [headers]
+    [headers],
   );
 
   const createEncodedUrl = useCallback(() => {
@@ -111,7 +116,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
     (content: string) => {
       setValue("query", content);
     },
-    [setValue]
+    [setValue],
   );
 
   const handlePrettify = useCallback(() => {
@@ -128,6 +133,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
       setSchemaString(schemaSDL);
     } catch (error) {
       console.error("Error fetching schema:", error);
+      showToast("Error fetching schema");
     }
   };
 

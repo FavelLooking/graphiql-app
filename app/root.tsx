@@ -12,6 +12,8 @@ import { checkTokenExpiration } from "./store/authSlice";
 import store, { AppDispatch } from "./store/store";
 import { Header } from "./components/header/header";
 import { Footer } from "./components/footer/footer";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import "./global.scss";
 
@@ -32,6 +34,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <Footer />
           <ScrollRestoration />
           <Scripts />
+          <ToastContainer />
         </body>
       </Provider>
     </html>
