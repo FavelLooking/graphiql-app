@@ -30,6 +30,7 @@ interface RequestBody {
 export default function GraphQlComponent({ serverData }: IServerData) {
   const navigate = useNavigate();
   const { register, handleSubmit, setValue, watch } = useForm<GraphQlInput>();
+  const apiUrl = watch("apiUrl");
   const query = watch("query");
   const sdlUrl = watch("sdlUrl");
   const [response, setResponse] = useState("");
@@ -240,13 +241,18 @@ export default function GraphQlComponent({ serverData }: IServerData) {
             </button>
           </div>
           <div>
-            <button type="submit" className={styles.button}>
+            <button
+              type="submit"
+              className={styles.button}
+              disabled={!apiUrl || !apiUrl.trim()}
+            >
               {t("buttons.submit").toUpperCase()}
             </button>
             <button
               type="button"
               className={styles.button}
               onClick={handlePrettify}
+              disabled={!query || !query.trim()}
             >
               {t("buttons.prettify")}
             </button>
