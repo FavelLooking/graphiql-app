@@ -3,7 +3,7 @@ import { expect } from "chai";
 import { MemoryRouter } from "react-router-dom";
 import { RedirectButton } from "../../button/RedirectButton";
 import { act } from "react-dom/test-utils";
-import sinon from "sinon";
+import { spy } from "sinon";
 
 describe("RedirectButton", () => {
   it("renders the button with provided text", () => {
@@ -17,7 +17,7 @@ describe("RedirectButton", () => {
   });
 
   it("triggers onClick callback when clicked", () => {
-    const mockOnClick = sinon.spy();
+    const mockOnClick = spy();
 
     render(
       <MemoryRouter>
