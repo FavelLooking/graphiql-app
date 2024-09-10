@@ -12,6 +12,7 @@ interface ICodeEditorProps {
   onBlur?: () => void;
   value: string;
   variablesValue: string;
+  onVariablesBlur?: () => void;
 }
 
 const CodeEditor: React.FC<ICodeEditorProps> = ({
@@ -20,6 +21,7 @@ const CodeEditor: React.FC<ICodeEditorProps> = ({
   onVariablesChange,
   onBlur,
   variablesValue,
+  onVariablesBlur,
 }) => {
   const [isVariablesVisible, setIsVariablesVisible] = useState(false);
 
@@ -64,7 +66,12 @@ const CodeEditor: React.FC<ICodeEditorProps> = ({
       onVariablesChange(variablesValue);
     };
 
+    const handleVariablesBlur = () => {
+      if (onVariablesBlur) onVariablesBlur();
+    };
+
     variablesEditorRef.current.on("change", handleVariablesChange);
+    variablesEditorRef.current.on("blur", handleVariablesBlur);
 
     return () => {
       editorRef.current?.off("change", handleChange);
@@ -72,9 +79,10 @@ const CodeEditor: React.FC<ICodeEditorProps> = ({
       editorRef.current?.toTextArea();
 
       variablesEditorRef.current?.off("change", handleVariablesChange);
+      variablesEditorRef.current?.off("blur", handleVariablesBlur);
       variablesEditorRef.current?.toTextArea();
     };
-  }, [onChange, onVariablesChange, onBlur]);
+  }, [onChange, onVariablesChange, onBlur, onVariablesBlur]);
 
   useEffect(() => {
     if (editorRef.current && editorRef.current.getValue() !== value) {
