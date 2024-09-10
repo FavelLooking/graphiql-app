@@ -98,9 +98,12 @@ export default function GraphQlComponent({ serverData }: IServerData) {
 
   const fillSdlUrl = useCallback(
     (apiUrl: string) => {
-      setValue("sdlUrl", `${apiUrl}?sdl`);
+      const sdlUrl = watch("sdlUrl");
+      if (!sdlUrl) {
+        setValue("sdlUrl", apiUrl.trim() ? `${apiUrl}?sdl` : "");
+      }
     },
-    [setValue],
+    [setValue, watch],
   );
 
   const handleBlur = useCallback(() => {
