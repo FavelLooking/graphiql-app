@@ -5,6 +5,8 @@ import "codemirror-ssr/lib/codemirror.css";
 import "codemirror/theme/dracula.css";
 import CodeMirror from "codemirror";
 import styles from "./editor.module.scss";
+import { useTranslation } from "react-i18next";
+
 
 interface ICodeEditorProps {
   onChange: (content: string) => void;
@@ -24,11 +26,11 @@ const CodeEditor: React.FC<ICodeEditorProps> = ({
   onVariablesBlur,
 }) => {
   const [isVariablesVisible, setIsVariablesVisible] = useState(false);
-
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const editorRef = useRef<CodeMirror.EditorFromTextArea | null>(null);
   const variablesRef = useRef<HTMLTextAreaElement | null>(null);
   const variablesEditorRef = useRef<CodeMirror.EditorFromTextArea | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!textareaRef.current || !variablesRef.current) return;
@@ -37,7 +39,7 @@ const CodeEditor: React.FC<ICodeEditorProps> = ({
     implementPlaceholder(codemirror);
 
     editorRef.current = codemirror.fromTextArea(textareaRef.current, {
-      placeholder: "Enter GraphQL query...",
+      placeholder: t("placeholders.enterGraphQLQuery"),
       theme: "dracula",
       mode: "graphql",
     });
@@ -82,7 +84,7 @@ const CodeEditor: React.FC<ICodeEditorProps> = ({
       variablesEditorRef.current?.off("blur", handleVariablesBlur);
       variablesEditorRef.current?.toTextArea();
     };
-  }, [onChange, onVariablesChange, onBlur, onVariablesBlur]);
+  }, [onChange, onVariablesChange, onBlur, onVariablesBlur, t]);
 
   useEffect(() => {
     if (editorRef.current && editorRef.current.getValue() !== value) {

@@ -1,3 +1,4 @@
+import "./utils/i18n";
 import {
   Links,
   Meta,
