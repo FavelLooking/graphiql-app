@@ -1,6 +1,7 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import LoginForm from "../../auth/LoginForm";
 import { BrowserRouter } from "react-router-dom";
-import AuthContainer from "../../auth/AuthContainer";
 import { Provider } from "react-redux";
 import { I18nextProvider } from "react-i18next";
 import i18n from "i18next";
@@ -11,41 +12,43 @@ i18n.init({
   resources: {
     en: {
       translation: {
-        "buttons.login": "Login",
-        "buttons.register": "Register",
+        "buttons.signIn": "Sign In",
+        "titles.email": "Email",
+        "titles.password": "Password",
       },
     },
   },
 });
 
-describe("AuthContainer", () => {
-  it("renders the login form by default", () => {
+describe("LoginForm", () => {
+  it("renders email and password inputs", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
-            <AuthContainer />
+            <LoginForm />
           </I18nextProvider>
         </BrowserRouter>
       </Provider>
     );
 
-    expect(screen.getByRole("heading", { name: /Login/i })).toBeTruthy();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
   });
 
-  it("switches to register form when register tab is clicked", () => {
+  it("renders submit button", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
-            <AuthContainer />
+            <LoginForm />
           </I18nextProvider>
         </BrowserRouter>
       </Provider>
     );
 
-    fireEvent.click(screen.getByText("Register"));
-
-    expect(screen.queryByRole("heading", { name: /Register/i })).toBeTruthy();
+    expect(
+      screen.getByRole("button", { name: /sign in/i })
+    ).toBeInTheDocument();
   });
 });
