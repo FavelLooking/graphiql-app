@@ -14,10 +14,16 @@ type GraphQlInput = {
   apiUrl: string;
   query: string;
   sdlUrl: string;
+  variables?: string;
 };
 
 interface IServerData {
   serverData?: unknown;
+}
+
+interface RequestBody {
+  query?: string;
+  variables?: string;
 }
 
 export default function GraphQlComponent({ serverData }: IServerData) {
@@ -36,25 +42,66 @@ export default function GraphQlComponent({ serverData }: IServerData) {
   }, [serverData]);
 
   const changeUrl = useCallback(
-    (encodedApiUrl: string, encodedQuery: string) => {
+    (encodedApiUrl: string, encodedRequestBody: string) => {
       const headerParams = headers
         .filter(({ key, value }) => key || value)
         .map(({ key, value }) => `${key}=${value}`)
         .join("&");
-      const url = `/graphql/${encodedApiUrl}${encodedQuery ? `/${encodedQuery}` : ""}${headerParams ? `?${headerParams}` : ""}`;
+      const url = `/graphql/${encodedApiUrl}/${encodedRequestBody}${headerParams ? `?${headerParams}` : ""}`;
       setUrl(url);
       window.history.replaceState({}, "", url);
     },
     [headers]
   );
 
-  useEffect(() => {
+  const createEncodedUrl = useCallback(() => {
     const apiUrl = watch("apiUrl");
     const query = watch("query");
+    const variables = watch("variables");
+
+    const requestBody: RequestBody = {};
+
+    if (query && query.trim()) {
+      requestBody.query = query;
+    }
+
+    if (variables && variables.trim()) {
+      requestBody.variables = variables;
+    }
+
+    const encodedRequestBody = Object.keys(requestBody).length
+      ? btoa(JSON.stringify(requestBody))
+      : "";
+
     const encodedApiUrl = btoa(apiUrl ?? " ");
-    const encodedQuery = btoa(query ?? "");
-    changeUrl(encodedApiUrl, encodedQuery);
-  }, [headers, watch, changeUrl]);
+
+    return { encodedApiUrl, encodedRequestBody, apiUrl };
+  }, [watch]);
+
+  useEffect(() => {
+    const { encodedApiUrl, encodedRequestBody, apiUrl } = createEncodedUrl();
+
+    if (apiUrl.length > 0) {
+      changeUrl(encodedApiUrl, encodedRequestBody);
+    }
+  }, [headers, createEncodedUrl, changeUrl]);
+
+  const fillSdlUrl = useCallback(
+    (apiUrl: string) => {
+      setValue("sdlUrl", `${apiUrl}?sdl`);
+    },
+    [setValue],
+  );
+
+  const handleBlur = useCallback(() => {
+    const { encodedApiUrl, encodedRequestBody, apiUrl } = createEncodedUrl();
+
+    if (apiUrl.length > 0) {
+      changeUrl(encodedApiUrl, encodedRequestBody);
+    }
+
+    fillSdlUrl(apiUrl);
+  }, [createEncodedUrl, fillSdlUrl, changeUrl]);
 
   const onSubmit: SubmitHandler<GraphQlInput> = async () => {
     dispatch(saveQuery({ query: "graphql", route: targetUrl }));
@@ -71,22 +118,6 @@ export default function GraphQlComponent({ serverData }: IServerData) {
     const prettifiedQuery = prettifyQuery(query);
     setValue("query", prettifiedQuery);
   }, [query, setValue]);
-
-  const fillSdlUrl = useCallback(
-    (apiUrl: string) => {
-      setValue("sdlUrl", `${apiUrl}?sdl`);
-    },
-    [setValue]
-  );
-
-  const handleBlur = useCallback(() => {
-    const apiUrl = watch("apiUrl");
-    const query = watch("query");
-    const encodedApiUrl = btoa(apiUrl ?? " ");
-    const encodedQuery = btoa(query ?? "");
-    changeUrl(encodedApiUrl, encodedQuery);
-    fillSdlUrl(apiUrl);
-  }, [watch, fillSdlUrl, changeUrl]);
 
   const makeDocumentation = async () => {
     try {
@@ -123,6 +154,13 @@ export default function GraphQlComponent({ serverData }: IServerData) {
   const handleAddHeader = () => {
     setHeaders([...headers, { key: "", value: "" }]);
   };
+
+  const handleVariablesChange = useCallback(
+    (variables: string) => {
+      setValue("variables", variables);
+    },
+    [setValue],
+  );
 
   return (
     <>
@@ -210,6 +248,9 @@ export default function GraphQlComponent({ serverData }: IServerData) {
               onChange={handleEditorChange}
               value={query}
               onBlur={handleBlur}
+              onVariablesChange={handleVariablesChange}
+              variablesValue={watch("variables") ?? ""}
+              onVariablesBlur={useCallback(() => handleBlur(), [handleBlur])}
             />
           </div>
         </form>

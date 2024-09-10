@@ -4,34 +4,40 @@ import GraphQLClientPage from "../components/graphql/GraphQlComponent";
 
 interface IParams {
   encodedApiUrl?: string;
-  encodedQuery?: string;
+  encodedRequestBody?: string;
 }
 
 export const loader: LoaderFunction = async ({
   params,
 }: {
   params: IParams;
+  request: Request;
 }) => {
   try {
-    const { encodedApiUrl, encodedQuery } = params;
-    if (!encodedApiUrl || !encodedQuery) {
+    const { encodedApiUrl, encodedRequestBody } = params;
+
+    if (!encodedApiUrl || !encodedRequestBody) {
       return json({ error: "Missing parameters" }, { status: 400 });
     }
 
     const apiUrl = atob(encodedApiUrl);
-    const query = atob(encodedQuery);
+    const requestBody = atob(encodedRequestBody);
+    const { query, variables } = JSON.parse(requestBody);
 
     const response = await fetch(apiUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({ query, variables }),
     });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data: unknown = await response.json();
+    const data = await response.json();
     return json(data);
   } catch (error) {
     console.error("Loader error:", error);
