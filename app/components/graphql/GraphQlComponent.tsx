@@ -8,6 +8,7 @@ import { buildClientSchema, getIntrospectionQuery, printSchema } from "graphql";
 import { createGraphiQLFetcher } from "@graphiql/toolkit";
 import { useDispatch } from "react-redux";
 import { saveQuery } from "~/store/historySlice";
+import { useTranslation } from "react-i18next";
 
 type GraphQlInput = {
   apiUrl: string;
@@ -28,6 +29,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
   const dispatch = useDispatch();
   const [schemaString, setSchemaString] = useState<string>("");
   const [targetUrl, setUrl] = useState("");
+  const { t } = useTranslation();
 
   useEffect(() => {
     setResponse(JSON.stringify(serverData, null, 2));
@@ -43,7 +45,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
       setUrl(url);
       window.history.replaceState({}, "", url);
     },
-    [headers],
+    [headers]
   );
 
   useEffect(() => {
@@ -62,7 +64,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
     (content: string) => {
       setValue("query", content);
     },
-    [setValue],
+    [setValue]
   );
 
   const handlePrettify = useCallback(() => {
@@ -74,7 +76,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
     (apiUrl: string) => {
       setValue("sdlUrl", `${apiUrl}?sdl`);
     },
-    [setValue],
+    [setValue]
   );
 
   const handleBlur = useCallback(() => {
@@ -124,7 +126,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
 
   return (
     <>
-      <h1 className={styles.title}>GraphQL Client</h1>
+      <h1 className={styles.title}>{t("titles.graphql")}</h1>
       <div className={styles.pageContainer}>
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -136,7 +138,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
               {...register("apiUrl")}
               id="apiUrl"
               type="text"
-              placeholder="please, enter URL"
+              placeholder={t("placeholders.enterURL")}
               className={styles.inputField}
               onBlur={handleBlur}
             />
@@ -147,18 +149,18 @@ export default function GraphQlComponent({ serverData }: IServerData) {
               {...register("sdlUrl")}
               id="sdlUrl"
               type="text"
-              placeholder="please, enter URL"
+              placeholder={t("placeholders.enterURL")}
               className={styles.inputField}
               onBlur={handleBlur}
             />
           </label>
           <div>
-            <h4 className={styles.headerTitle}>Headers:</h4>
+            <h4 className={styles.headerTitle}>{t("titles.headers")}:</h4>
             {headers.map((header, index) => (
               <div key={index} className={styles.headerContainer}>
                 <input
                   type="text"
-                  placeholder="Header Key"
+                  placeholder={t("placeholders.headerKey")}
                   value={header.key}
                   onChange={(e) =>
                     handleHeaderChange(index, e.target.value, header.value)
@@ -167,7 +169,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
                 />
                 <input
                   type="text"
-                  placeholder="Header Value"
+                  placeholder={t("placeholders.headerValue")}
                   value={header.value}
                   onChange={(e) =>
                     handleHeaderChange(index, header.key, e.target.value)
@@ -181,26 +183,26 @@ export default function GraphQlComponent({ serverData }: IServerData) {
               onClick={handleAddHeader}
               className={styles.button}
             >
-              Add Header
+              {t("buttons.addHeader")}
             </button>
           </div>
           <div>
             <button type="submit" className={styles.button}>
-              SUBMIT
+              {t("buttons.submit").toUpperCase()}
             </button>
             <button
               type="button"
               className={styles.button}
               onClick={handlePrettify}
             >
-              Prettify
+              {t("buttons.prettify")}
             </button>
             <button
               type="button"
               className={styles.button}
               onClick={makeDocumentation}
             >
-              Get SDL Scheme
+              {t("buttons.getSDLScheme")}
             </button>
           </div>
           <div>
@@ -212,17 +214,19 @@ export default function GraphQlComponent({ serverData }: IServerData) {
           </div>
         </form>
         <div className={styles.responseContainer}>
-          <h2 className={styles.responseTitle}>Response</h2>
+          <h2 className={styles.responseTitle}>{t("titles.response")}</h2>
           {response ? (
             <pre className={styles.preContainer}>{response}</pre>
           ) : (
-            <pre className={styles.preContainer}>Right now it&apos;s empty</pre>
+            <pre className={styles.preContainer}>{t("emptyResponse")}</pre>
           )}
         </div>
 
         {schemaString ? (
           <div className={styles.documentationContainer}>
-            <h2 className={styles.documentationTitle}>Documentation</h2>
+            <h2 className={styles.documentationTitle}>
+              {t("titles.documentation")}
+            </h2>
             <pre className={styles.preContainer}>{schemaString}</pre>
           </div>
         ) : null}

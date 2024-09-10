@@ -5,6 +5,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "~/store/store";
 import { Link } from "@remix-run/react";
 
+import { useTranslation } from "react-i18next";
+
+
 export const History: React.FC = () => {
   const [links, setLinks] = useState<{ query: string; route: string }[]>([]);
   const items = useSelector((state: RootState) => state.history.queries);
@@ -17,16 +20,23 @@ export const History: React.FC = () => {
     return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
   };
 
+  const { t } = useTranslation();
   return (
     <div className={styles.historyContainer}>
-      <h1>History</h1>
+      <h1>{t("buttons.history")}</h1>
       {links.length === 0 ? (
         <div className={styles.emptyHistory}>
-          <p>You haven&#39;t executed any requests yet.</p>
-          <p>It&#39;s empty here. Try those options:</p>
+          <p>{t("emptyHistoryP1")}</p>
+          <p>{t("emptyHistoryP2")}</p>
           <div className={styles.links}>
-            <RedirectButton text="REST Client" redirectPath="/rest" />
-            <RedirectButton text="GraphiQL Client" redirectPath="/graphql" />
+            <RedirectButton
+              text={t("buttons.restClient")}
+              redirectPath="/rest"
+            />
+            <RedirectButton
+              text={t("buttons.graphiqlClient")}
+              redirectPath="/graphql"
+            />
           </div>
         </div>
       ) : (

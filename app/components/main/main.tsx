@@ -2,39 +2,28 @@ import React from "react";
 import styles from "./main.module.scss";
 import { auth } from "../../utils/firebaseConfig";
 import { RedirectButton } from "../button/RedirectButton";
+import { useTranslation } from "react-i18next";
 
 export const Main: React.FC = () => {
   const user = auth.currentUser;
+  const { t } = useTranslation();
 
   return (
     <main className={styles.container}>
       <section className={styles.welcomeSection}>
-        <h1>Welcome to REST/GraphiQL Client!</h1>
-        <p className={styles.description}>
-          This project is developed as part of the RS School React course and
-          aims to provide a client interface for interacting with RESTful and
-          GraphQL APIs.
-        </p>
+        <h1>{t("welcome")}</h1>
+        <p className={styles.description}>{t("description")}</p>
       </section>
 
       <section className={styles.aboutSection}>
-        <h2>About the Developers</h2>
+        <h2>{t("developers")}</h2>
         <div className={styles.developerList}>
           <div className={styles.developer}>
-            <h3>Maxim</h3>
+            <h3>{t("maxim")}</h3>
             <ul>
-              <li>
-                Implemented Sign In/Sign Up functionality with client-side
-                validation.
-              </li>
-              <li>
-                Created the History route to restore previous requests for both
-                REST and GraphQL clients.
-              </li>
-              <li>
-                Designed the Welcome route logic to manage token expiration and
-                user redirection.
-              </li>
+              <li>{t("maximTasks.task1")}</li>
+              <li>{t("maximTasks.task2")}</li>
+              <li>{t("maximTasks.task3")}</li>
             </ul>
             <a
               href="https://github.com/maximozaitsev"
@@ -42,23 +31,15 @@ export const Main: React.FC = () => {
               className={styles.link}
               rel="noreferrer"
             >
-              GitHub Profile
+              {t("github")}
             </a>
           </div>
           <div className={styles.developer}>
-            <h3>Pavel</h3>
+            <h3>{t("pavel")}</h3>
             <ul>
-              <li>
-                Developed the GraphiQL client, including query editing and
-                response sections.
-              </li>
-              <li>
-                Implemented the documentation explorer for GraphQL requests.
-              </li>
-              <li>
-                Added support for managing headers and variables within the
-                GraphQL client.
-              </li>
+              <li>{t("pavelTasks.task1")}</li>
+              <li>{t("pavelTasks.task2")}</li>
+              <li>{t("pavelTasks.task3")}</li>
             </ul>
             <a
               href="https://github.com/FavelLooking"
@@ -66,21 +47,15 @@ export const Main: React.FC = () => {
               className={styles.link}
               rel="noreferrer"
             >
-              GitHub Profile
+              {t("github")}
             </a>
           </div>
           <div className={styles.developer}>
-            <h3>Fedor</h3>
+            <h3>{t("fedor")}</h3>
             <ul>
-              <li>
-                Built the RESTful client with full support for query editing and
-                method selection.
-              </li>
-              <li>
-                Developed a functional response section for RESTful API
-                interactions.
-              </li>
-              <li>Added base64 encoding support for URL and request bodies.</li>
+              <li>{t("fedorTasks.task1")}</li>
+              <li>{t("fedorTasks.task2")}</li>
+              <li>{t("fedorTasks.task3")}</li>
             </ul>
             <a
               href="https://github.com/farsenyev"
@@ -88,40 +63,43 @@ export const Main: React.FC = () => {
               className={styles.link}
               rel="noreferrer"
             >
-              GitHub Profile
+              {t("github")}
             </a>
           </div>
         </div>
       </section>
 
       <section className={styles.courseSection}>
-        <h2>About the Course</h2>
-        <p>
-          This project is part of the{" "}
-          <a
-            href="https://rs.school/courses/reactjs"
-            className={styles.link}
-            target="_blank"
-            rel="noreferrer"
-          >
-            RS School React course
-          </a>
-          , which covers modern React development practices, including routing,
-          client-side state management, and API interactions.
-        </p>
+        <h2>{t("cource")}</h2>
+        <p dangerouslySetInnerHTML={{ __html: t("courseInfo") }} />
       </section>
 
       <section className={styles.buttonsSection}>
         {!user ? (
           <>
-            <RedirectButton text="Sign In" redirectPath="/auth?tab=login" />
-            <RedirectButton text="Sign Up" redirectPath="/auth?tab=register" />
+            <RedirectButton
+              text={t("buttons.signIn")}
+              redirectPath="/auth?tab=login"
+            />
+            <RedirectButton
+              text={t("buttons.signUp")}
+              redirectPath="/auth?tab=register"
+            />
           </>
         ) : (
           <>
-            <RedirectButton text="REST Client" redirectPath="/rest" />
-            <RedirectButton text="GraphiQL" redirectPath="/graphql" />
-            <RedirectButton text="History" redirectPath="/history" />
+            <RedirectButton
+              text={t("buttons.restClient")}
+              redirectPath="/rest"
+            />
+            <RedirectButton
+              text={t("buttons.graphiqlClient")}
+              redirectPath="/graphql"
+            />
+            <RedirectButton
+              text={t("buttons.history")}
+              redirectPath="/history"
+            />
           </>
         )}
       </section>
