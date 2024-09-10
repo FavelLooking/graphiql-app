@@ -117,9 +117,21 @@ export default function GraphQlComponent({ serverData }: IServerData) {
     fillSdlUrl(apiUrl);
   }, [createEncodedUrl, fillSdlUrl, changeUrl]);
 
+  const validateUrl = (apiUrl: string) => {
+    try {
+      new URL(apiUrl);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   const onSubmit: SubmitHandler<GraphQlInput> = async () => {
-    dispatch(saveQuery({ query: "graphql", route: targetUrl }));
-    navigate(targetUrl);
+    if (validateUrl(apiUrl)) {
+      dispatch(saveQuery({ query: "graphql", route: targetUrl }));
+      navigate(targetUrl);
+    }
+    showWarnToast("URL isn't valid");
   };
   const handleEditorChange = useCallback(
     (content: string) => {
