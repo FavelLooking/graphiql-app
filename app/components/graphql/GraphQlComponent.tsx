@@ -127,7 +127,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
   };
 
   const onSubmit: SubmitHandler<GraphQlInput> = async () => {
-    if (validateUrl(apiUrl)) {
+    if (validateUrl(apiUrl) && query) {
       dispatch(saveQuery({ query: "graphql", route: targetUrl }));
       navigate(targetUrl);
     }
@@ -256,7 +256,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
             <button
               type="submit"
               className={styles.button}
-              disabled={!apiUrl || !apiUrl.trim()}
+              disabled={!apiUrl?.trim() || !query?.trim()}
             >
               {t("buttons.submit").toUpperCase()}
             </button>
