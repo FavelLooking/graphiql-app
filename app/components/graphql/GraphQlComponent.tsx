@@ -9,6 +9,7 @@ import { createGraphiQLFetcher } from "@graphiql/toolkit";
 import { useDispatch } from "react-redux";
 import { saveQuery } from "~/store/historySlice";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 type GraphQlInput = {
   apiUrl: string;
@@ -29,13 +30,23 @@ interface RequestBody {
 export default function GraphQlComponent({ serverData }: IServerData) {
   const navigate = useNavigate();
   const { register, handleSubmit, setValue, watch } = useForm<GraphQlInput>();
+  const apiUrl = watch("apiUrl");
   const query = watch("query");
+  const sdlUrl = watch("sdlUrl");
   const [response, setResponse] = useState("");
   const [headers, setHeaders] = useState([{ key: "", value: "" }]);
   const dispatch = useDispatch();
   const [schemaString, setSchemaString] = useState<string>("");
   const [targetUrl, setUrl] = useState("");
   const { t } = useTranslation();
+
+  const showToast = (toastText: string) => {
+    toast(toastText);
+  };
+
+  const showWarnToast = (toastText: string) => {
+    toast.warn(toastText);
+  };
 
   useEffect(() => {
     setResponse(JSON.stringify(serverData, null, 2));
@@ -51,7 +62,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
       setUrl(url);
       window.history.replaceState({}, "", url);
     },
-    [headers]
+    [headers],
   );
 
   const createEncodedUrl = useCallback(() => {
@@ -88,9 +99,12 @@ export default function GraphQlComponent({ serverData }: IServerData) {
 
   const fillSdlUrl = useCallback(
     (apiUrl: string) => {
-      setValue("sdlUrl", `${apiUrl}?sdl`);
+      const sdlUrl = watch("sdlUrl");
+      if (!sdlUrl) {
+        setValue("sdlUrl", apiUrl.trim() ? `${apiUrl}?sdl` : "");
+      }
     },
-    [setValue],
+    [setValue, watch],
   );
 
   const handleBlur = useCallback(() => {
@@ -103,15 +117,26 @@ export default function GraphQlComponent({ serverData }: IServerData) {
     fillSdlUrl(apiUrl);
   }, [createEncodedUrl, fillSdlUrl, changeUrl]);
 
+  const validateUrl = (apiUrl: string) => {
+    try {
+      new URL(apiUrl);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   const onSubmit: SubmitHandler<GraphQlInput> = async () => {
-    dispatch(saveQuery({ query: "graphql", route: targetUrl }));
-    navigate(targetUrl);
+    if (validateUrl(apiUrl) && query) {
+      dispatch(saveQuery({ query: "graphql", route: targetUrl }));
+      navigate(targetUrl);
+    } else showWarnToast("URL isn't valid");
   };
   const handleEditorChange = useCallback(
     (content: string) => {
       setValue("query", content);
     },
-    [setValue]
+    [setValue],
   );
 
   const handlePrettify = useCallback(() => {
@@ -126,8 +151,10 @@ export default function GraphQlComponent({ serverData }: IServerData) {
 
       const schemaSDL = printSchema(schema);
       setSchemaString(schemaSDL);
+      showToast("Cool! Here is you scheme");
     } catch (error) {
-      console.error("Error fetching schema:", error);
+      console.error("Error fetching scheme:", error);
+      showWarnToast("Error fetching scheme");
     }
   };
 
@@ -225,13 +252,18 @@ export default function GraphQlComponent({ serverData }: IServerData) {
             </button>
           </div>
           <div>
-            <button type="submit" className={styles.button}>
+            <button
+              type="submit"
+              className={styles.button}
+              disabled={!apiUrl?.trim() || !query?.trim()}
+            >
               {t("buttons.submit").toUpperCase()}
             </button>
             <button
               type="button"
               className={styles.button}
               onClick={handlePrettify}
+              disabled={!query || !query.trim()}
             >
               {t("buttons.prettify")}
             </button>
@@ -239,6 +271,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
               type="button"
               className={styles.button}
               onClick={makeDocumentation}
+              disabled={!sdlUrl}
             >
               {t("buttons.getSDLScheme")}
             </button>

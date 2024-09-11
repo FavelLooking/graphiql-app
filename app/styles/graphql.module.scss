@@ -68,6 +68,9 @@
   &:hover {
     background-color: #0056b3;
   }
+  &:disabled {
+    background-color: #565b6238;
+  }
 }
 
 .preContainer {
