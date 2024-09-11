@@ -1,17 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./history.module.scss";
 import { RedirectButton } from "../button/RedirectButton";
+import { useSelector } from "react-redux";
+import { RootState } from "~/store/store";
+import { Link } from "@remix-run/react";
+
 import { useTranslation } from "react-i18next";
 
+
 export const History: React.FC = () => {
-  // TODO: set correct source of history when it's implemented
-  const hasHistory = localStorage.getItem("requests") !== null;
+  const [links, setLinks] = useState<{ query: string; route: string }[]>([]);
+  const items = useSelector((state: RootState) => state.history.queries);
+
+  useEffect(() => {
+    setLinks(items);
+  }, [items]);
+
+  const truncateText = (text: string, maxLength: number) => {
+    return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+  };
 
   const { t } = useTranslation();
   return (
     <div className={styles.historyContainer}>
       <h1>{t("buttons.history")}</h1>
-      {!hasHistory ? (
+      {links.length === 0 ? (
         <div className={styles.emptyHistory}>
           <p>{t("emptyHistoryP1")}</p>
           <p>{t("emptyHistoryP2")}</p>
@@ -27,7 +40,18 @@ export const History: React.FC = () => {
           </div>
         </div>
       ) : (
-        <p>{t("historyDescription")}</p>
+        <div className={styles.linkContainer}>
+          {links.map((link, index) => (
+            <Link
+              to={`../${link.route}`}
+              key={index}
+              className={styles.queryLinks}
+            >
+              <span>{link.query.toUpperCase()}</span>
+              <span>{truncateText(link.route, 30)}</span>
+            </Link>
+          ))}
+        </div>
       )}
     </div>
   );
