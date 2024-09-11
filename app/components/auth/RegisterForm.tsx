@@ -27,6 +27,9 @@ const RegisterForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    console.log("Attempting to submit the form...");
+
     if (isFormValid) {
       const result = await handleAuthSubmit(
         false,
@@ -35,15 +38,24 @@ const RegisterForm: React.FC = () => {
         dispatch,
         t
       );
+
+      console.log("Registration result:", result);
+
       setNotification({
         message: result.message,
         type: result.success ? "success" : "error",
       });
+
       if (result.success) {
+        console.log("Registration successful. Navigating to home page...");
         setTimeout(() => {
           navigate("/");
         }, 2000);
+      } else {
+        console.log("Registration failed.");
       }
+    } else {
+      console.log("Form validation failed. Please check the inputs.");
     }
   };
 
