@@ -130,8 +130,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
     if (validateUrl(apiUrl) && query) {
       dispatch(saveQuery({ query: "graphql", route: targetUrl }));
       navigate(targetUrl);
-    }
-    showWarnToast("URL isn't valid");
+    } else showWarnToast("URL isn't valid");
   };
   const handleEditorChange = useCallback(
     (content: string) => {
