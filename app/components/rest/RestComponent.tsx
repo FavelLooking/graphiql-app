@@ -8,6 +8,7 @@ import styles from "./restcomponent.module.scss";
 import { saveQuery } from "~/store/historySlice";
 import { IRestComponentProps } from "~/components/rest/RestComponent.interface";
 import { useTranslation } from "react-i18next";
+import {toast} from "react-toastify";
 
 export const RestComponent: React.FC<IRestComponentProps> = ({
   serverData,
@@ -26,6 +27,12 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
+
+  const warnToast = (str: string) => {
+    toast.warn(str,{
+      position: "bottom-right"}
+    )
+  }
 
   const decodeBase64 = (str: string) => {
     return decodeURIComponent(escape(atob(str)));
@@ -84,6 +91,16 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
     setVariables(newVariables);
   };
 
+  const prettifyContent = () => {
+    try {
+      const parsed = JSON.parse(bodyContent);
+      const prettified = JSON.stringify(parsed, null, 2);
+      setBodyContent(prettified);
+    } catch (error) {
+      warnToast("Invalid JSON format")
+    }
+  };
+
   const encodeBase64 = (str: string) => {
     return btoa(unescape(encodeURIComponent(str)));
   };
@@ -92,6 +109,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
     if (!selectedMethod && !endpoint) {
       return;
     }
+
     const encodedEndpoint = encodeBase64(endpoint);
     const queryParams = [
       ...headers
@@ -107,10 +125,12 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
             `${encodeURIComponent(variable.key)}=${encodeURIComponent(variable.value)}`
         ),
     ].join("&");
+    const encodedBody = bodyContent ? encodeBase64(bodyContent) : 'null'
 
-    const url = `/${selectedMethod}/${encodedEndpoint}${bodyContent ? `/${encodeBase64(bodyContent)}` : ""}${
+    const url = `/${selectedMethod}/${encodedEndpoint}${bodyContent ? `/${encodedBody}` : ""}${
       queryParams ? `?${queryParams}` : ""
     }`;
+
     if (url) {
       window.history.replaceState(null, "", url);
     }
@@ -265,11 +285,11 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
             onBeforeChange={(editor, data, value) => {
               setBodyContent(value);
             }}
-            onChange={(editor, data, value) => {
-              setBodyContent(value);
-            }}
             onBlur={updateURL}
           />
+          <button onClick={prettifyContent} className={styles.prettifyButton}>
+            Prettify
+          </button>
         </div>
       )}
 
