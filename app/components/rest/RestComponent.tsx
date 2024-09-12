@@ -45,12 +45,14 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
       const newVariables: Array<{ key: string; value: string }> = [];
 
       queryParams.forEach((value, key) => {
-        if (key.startsWith("header_")) {
-          newHeaders.push({ key: key.replace("header_", ""), value });
-        } else if (key.startsWith("var_")) {
-          newVariables.push({ key: key.replace("var_", ""), value });
-        }
-      });
+        if (
+            key.toLowerCase() === "authorization" ||
+            key.toLowerCase() === "content-type"
+        ) {
+          newHeaders.push({ key, value });
+        } else {
+          newVariables.push({ key, value });
+      }});
 
       setSelectedMethod(method);
       setEndpoint(decodedEndpoint);
