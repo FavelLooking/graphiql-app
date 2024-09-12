@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 export const RestComponent: React.FC<IRestComponentProps> = ({
   serverData,
 }) => {
-  const [selectedMethod, setSelectedMethod] = useState<string>("GET");
+  const [selectedMethod, setSelectedMethod] = useState<string>("");
   const [endpoint, setEndpoint] = useState<string>("");
   const [headers, setHeaders] = useState<Array<{ key: string; value: string }>>(
     [{ key: "", value: "" }]
@@ -89,6 +89,9 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
   };
 
   const updateURL = useCallback(() => {
+    if (!selectedMethod && !endpoint) {
+      return;
+    }
     const encodedEndpoint = encodeBase64(endpoint);
     const queryParams = [
       ...headers
@@ -108,12 +111,14 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
     const url = `/${selectedMethod}/${encodedEndpoint}${bodyContent ? `/${encodeBase64(bodyContent)}` : ""}${
       queryParams ? `?${queryParams}` : ""
     }`;
-    window.history.replaceState(null, "", url);
+    if (url) {
+      window.history.replaceState(null, "", url);
+    }
   }, [selectedMethod, endpoint, headers, variables, bodyContent]);
 
   useEffect(() => {
-    updateURL();
-  }, [updateURL]);
+    if (selectedMethod) updateURL();
+  }, [selectedMethod, updateURL]);
 
   const handleSubmit = () => {
     const encodedEndpoint = encodeBase64(endpoint);
@@ -158,6 +163,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
         }}
         className={styles.apiMethod}
       >
+        <option value="">-- Select Method --</option>
         <option value="GET">GET</option>
         <option value="POST">POST</option>
         <option value="PUT">PUT</option>
@@ -246,7 +252,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
         </button>
       </div>
 
-      {selectedMethod !== "GET" && (
+      {selectedMethod && selectedMethod !== "GET" && (
         <div className={styles.bodySection}>
           <h4>{t("titles.body")}</h4>
           <CodeMirror
