@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { prettifyQuery } from "../../utils/prettifyQuery";
 import CodeEditor from "../../components/editor/Editor";
-import { useNavigate } from "@remix-run/react";
-import styles from "../../styles/graphql.module.scss";
+import { useLocation, useNavigate } from "@remix-run/react";
+import styles from "./graphql.module.scss";
 import { buildClientSchema, getIntrospectionQuery, printSchema } from "graphql";
 import { createGraphiQLFetcher } from "@graphiql/toolkit";
 import { useDispatch } from "react-redux";
@@ -27,8 +27,21 @@ interface RequestBody {
   variables?: string;
 }
 
+interface IQueryWithVariables {
+  query: string;
+  variables: string;
+}
+
+interface IQueryWithoutVariables {
+  query: string;
+  variables?: undefined;
+}
+
+type QueryData = IQueryWithVariables | IQueryWithoutVariables;
+
 export default function GraphQlComponent({ serverData }: IServerData) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { register, handleSubmit, setValue, watch } = useForm<GraphQlInput>();
   const apiUrl = watch("apiUrl");
   const query = watch("query");
@@ -47,6 +60,45 @@ export default function GraphQlComponent({ serverData }: IServerData) {
   const showWarnToast = (toastText: string) => {
     toast.warn(toastText);
   };
+
+  const decodeBase64 = (str: string) => {
+    return decodeURIComponent(escape(atob(str)));
+  };
+
+  const fillSdlUrl = useCallback(
+    (apiUrl: string) => {
+      const sdlUrl = watch("sdlUrl");
+      if (!sdlUrl) {
+        setValue("sdlUrl", apiUrl.trim() ? `${apiUrl}?sdl` : "");
+      }
+    },
+    [setValue, watch],
+  );
+
+  useEffect(() => {
+    const urlParts = location.pathname.split("/").slice(2);
+    if (urlParts.length > 1) {
+      const [encodedURL, encodedBody] = urlParts;
+      const decodedURL = decodeBase64(encodedURL);
+      const decodedBody: QueryData = JSON.parse(decodeBase64(encodedBody));
+
+      const query = decodedBody.query.replace(/\\n/g, "\n");
+      const variables = decodedBody.variables ?? "";
+
+      const queryParams = new URLSearchParams(location.search);
+      const newHeaders: Array<{ key: string; value: string }> = [];
+
+      queryParams.forEach((value, key) => {
+        newHeaders.push({ key, value });
+      });
+
+      setHeaders(newHeaders.length > 0 ? newHeaders : [{ key: "", value: "" }]);
+      setValue("query", query);
+      setValue("variables", variables);
+      setValue("apiUrl", decodedURL);
+      fillSdlUrl(decodedURL);
+    }
+  }, [location, setValue, fillSdlUrl]);
 
   useEffect(() => {
     setResponse(JSON.stringify(serverData, null, 2));
@@ -97,16 +149,6 @@ export default function GraphQlComponent({ serverData }: IServerData) {
     }
   }, [headers, createEncodedUrl, changeUrl]);
 
-  const fillSdlUrl = useCallback(
-    (apiUrl: string) => {
-      const sdlUrl = watch("sdlUrl");
-      if (!sdlUrl) {
-        setValue("sdlUrl", apiUrl.trim() ? `${apiUrl}?sdl` : "");
-      }
-    },
-    [setValue, watch],
-  );
-
   const handleBlur = useCallback(() => {
     const { encodedApiUrl, encodedRequestBody, apiUrl } = createEncodedUrl();
 
@@ -130,7 +172,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
     if (validateUrl(apiUrl) && query) {
       dispatch(saveQuery({ query: "graphql", route: targetUrl }));
       navigate(targetUrl);
-    } else showWarnToast("URL isn't valid");
+    } else showWarnToast(t("notifications.urlFail"));
   };
   const handleEditorChange = useCallback(
     (content: string) => {
@@ -151,10 +193,10 @@ export default function GraphQlComponent({ serverData }: IServerData) {
 
       const schemaSDL = printSchema(schema);
       setSchemaString(schemaSDL);
-      showToast("Cool! Here is you scheme");
+      showToast(t("notifications.schemeSuccess"));
     } catch (error) {
       console.error("Error fetching scheme:", error);
-      showWarnToast("Error fetching scheme");
+      showWarnToast(t("notifications.schemeFail"));
     }
   };
 
@@ -198,7 +240,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
           className={styles.formContainer}
         >
           <label htmlFor="apiUrl">
-            <b>Endpoint URL:</b>
+            <b>{t("titles.endpointURL")}</b>
             <input
               {...register("apiUrl")}
               id="apiUrl"
@@ -290,7 +332,9 @@ export default function GraphQlComponent({ serverData }: IServerData) {
         <div className={styles.responseContainer}>
           <h2 className={styles.responseTitle}>{t("titles.response")}</h2>
           {response ? (
-            <pre className={styles.preContainer}>{response}</pre>
+            <>
+              <pre className={styles.preContainer}>{response}</pre>
+            </>
           ) : (
             <pre className={styles.preContainer}>{t("emptyResponse")}</pre>
           )}
