@@ -290,7 +290,9 @@ export default function GraphQlComponent({ serverData }: IServerData) {
         <div className={styles.responseContainer}>
           <h2 className={styles.responseTitle}>{t("titles.response")}</h2>
           {response ? (
-            <pre className={styles.preContainer}>{response}</pre>
+            <>
+              <pre className={styles.preContainer}>{response}</pre>
+            </>
           ) : (
             <pre className={styles.preContainer}>{t("emptyResponse")}</pre>
           )}

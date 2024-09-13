@@ -34,7 +34,7 @@ export const loader: LoaderFunction = async ({
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      return json({ data: response.statusText, response: response.status });
     }
 
     const data = await response.json();
