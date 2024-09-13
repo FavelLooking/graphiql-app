@@ -1,13 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": [
-      "@remix-run/node",
-      "vite/client",
-      "vitest/globals",
-      "@testing-library/jest-dom",
-      "sinon"
-    ],
+    "types": ["vitest/globals", "@remix-run/node", "vite/client", "sinon"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
@@ -25,12 +19,5 @@
     },
     "noEmit": true
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/.server/**/*.ts",
-    "**/.server/**/*.tsx",
-    "**/.client/**/*.ts",
-    "**/.client/**/*.tsx"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", "vitest/globals.d.ts"]
 }
