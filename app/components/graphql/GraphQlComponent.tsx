@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { prettifyQuery } from "../../utils/prettifyQuery";
 import CodeEditor from "../../components/editor/Editor";
 import { useNavigate } from "@remix-run/react";
-import styles from "../../styles/graphql.module.scss";
+import styles from "./graphql.module.scss";
 import { buildClientSchema, getIntrospectionQuery, printSchema } from "graphql";
 import { createGraphiQLFetcher } from "@graphiql/toolkit";
 import { useDispatch } from "react-redux";
