@@ -38,7 +38,7 @@ export const loader: LoaderFunction = async ({
     }
 
     const data = await response.json();
-    return json(data);
+    return json({ data, response: response.status });
   } catch (error) {
     console.error("Loader error:", error);
     return json({ error: (error as Error).message }, { status: 500 });
