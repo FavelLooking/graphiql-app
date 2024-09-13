@@ -130,7 +130,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
     if (validateUrl(apiUrl) && query) {
       dispatch(saveQuery({ query: "graphql", route: targetUrl }));
       navigate(targetUrl);
-    } else showWarnToast("URL isn't valid");
+    } else showWarnToast(t("notifications.urlFail"));
   };
   const handleEditorChange = useCallback(
     (content: string) => {
@@ -151,10 +151,10 @@ export default function GraphQlComponent({ serverData }: IServerData) {
 
       const schemaSDL = printSchema(schema);
       setSchemaString(schemaSDL);
-      showToast("Cool! Here is you scheme");
+      showToast(t("notifications.schemeSuccess"));
     } catch (error) {
       console.error("Error fetching scheme:", error);
-      showWarnToast("Error fetching scheme");
+      showWarnToast(t("notifications.schemeFail"));
     }
   };
 
@@ -198,7 +198,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
           className={styles.formContainer}
         >
           <label htmlFor="apiUrl">
-            <b>Endpoint URL:</b>
+            <b>{t("titles.endpointURL")}</b>
             <input
               {...register("apiUrl")}
               id="apiUrl"
