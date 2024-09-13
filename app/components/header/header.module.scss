@@ -10,6 +10,7 @@
   position: fixed;
   background: $base-color-dark;
   transition: 0.5s all;
+  z-index: 10;
 }
 
 .isSticky {
