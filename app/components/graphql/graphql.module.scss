@@ -5,6 +5,15 @@
   text-align: left;
   gap: 2rem;
   padding: 0 2rem;
+
+  @media (max-width: 850px) {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.5rem;
+  }
 }
 
 .responseContainer,
@@ -17,6 +26,10 @@
   border-radius: 8px;
   padding: 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 930px) {
+    width: 90%;
+  }
 }
 
 .title {
@@ -42,6 +55,11 @@
   flex-direction: column;
   gap: 0.3rem;
   width: 45%;
+
+  @media (max-width: 930px) {
+    width: 80%;
+    align-items: center;
+  }
 }
 
 .inputField,
