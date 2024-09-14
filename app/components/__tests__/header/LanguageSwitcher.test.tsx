@@ -22,7 +22,7 @@ describe("LanguageSwitcher", () => {
     const { getByText } = render(
       <I18nextProvider i18n={i18n}>
         <LanguageSwitcher />
-      </I18nextProvider>
+      </I18nextProvider>,
     );
 
     expect(getByText("Рус")).toBeInTheDocument();
@@ -32,7 +32,7 @@ describe("LanguageSwitcher", () => {
     const { getByText } = render(
       <I18nextProvider i18n={i18n}>
         <LanguageSwitcher />
-      </I18nextProvider>
+      </I18nextProvider>,
     );
 
     const button = getByText("Рус");

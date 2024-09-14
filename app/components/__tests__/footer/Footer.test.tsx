@@ -37,14 +37,14 @@ describe("Footer", () => {
         <I18nextProvider i18n={i18n}>
           <Footer />
         </I18nextProvider>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const githubLink = screen.getByText("GitHub Repository");
     expect(githubLink).toBeInTheDocument();
     expect(githubLink).toHaveAttribute(
       "href",
-      "https://github.com/FavelLooking/graphiql-app"
+      "https://github.com/FavelLooking/graphiql-app",
     );
   });
 
@@ -54,7 +54,7 @@ describe("Footer", () => {
         <I18nextProvider i18n={i18n}>
           <Footer />
         </I18nextProvider>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const yearText = screen.getByText("2024");
@@ -67,7 +67,7 @@ describe("Footer", () => {
         <I18nextProvider i18n={i18n}>
           <Footer />
         </I18nextProvider>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const courseLogo = screen.getByAltText("course logo");

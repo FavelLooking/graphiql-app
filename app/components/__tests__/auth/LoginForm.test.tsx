@@ -36,7 +36,7 @@ describe("LoginForm", () => {
             <LoginForm />
           </I18nextProvider>
         </BrowserRouter>
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
@@ -51,11 +51,11 @@ describe("LoginForm", () => {
             <LoginForm />
           </I18nextProvider>
         </BrowserRouter>
-      </Provider>
+      </Provider>,
     );
 
     expect(
-      screen.getByRole("button", { name: /sign in/i })
+      screen.getByRole("button", { name: /sign in/i }),
     ).toBeInTheDocument();
   });
 
@@ -71,7 +71,7 @@ describe("LoginForm", () => {
             <LoginForm />
           </I18nextProvider>
         </BrowserRouter>
-      </Provider>
+      </Provider>,
     );
 
     const emailInput = screen.getByLabelText(/email/i);
@@ -87,7 +87,7 @@ describe("LoginForm", () => {
 
     // Wait for the notification to appear
     await waitFor(() =>
-      expect(screen.getByText("Login successful!")).toBeInTheDocument()
+      expect(screen.getByText("Login successful!")).toBeInTheDocument(),
     );
 
     expect(mockAuthSubmit).toHaveBeenCalledWith(
@@ -95,7 +95,7 @@ describe("LoginForm", () => {
       "test@example.com",
       "Password123!",
       expect.anything(),
-      expect.anything()
+      expect.anything(),
     );
 
     // Cleanup mock

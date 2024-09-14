@@ -32,7 +32,7 @@ describe("RegisterForm", () => {
             <RegisterForm />
           </I18nextProvider>
         </BrowserRouter>
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
@@ -50,11 +50,11 @@ describe("RegisterForm", () => {
             <RegisterForm />
           </I18nextProvider>
         </BrowserRouter>
-      </Provider>
+      </Provider>,
     );
 
     expect(
-      screen.getByRole("button", { name: /sign up/i })
+      screen.getByRole("button", { name: /sign up/i }),
     ).toBeInTheDocument();
   });
 
@@ -66,7 +66,7 @@ describe("RegisterForm", () => {
             <RegisterForm />
           </I18nextProvider>
         </BrowserRouter>
-      </Provider>
+      </Provider>,
     );
 
     // Simulate filling out the form
@@ -86,7 +86,9 @@ describe("RegisterForm", () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.queryByText(/Registration successful!/i)).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/Registration successful!/i),
+      ).not.toBeInTheDocument();
     });
   });
 });

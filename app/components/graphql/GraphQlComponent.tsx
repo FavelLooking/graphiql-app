@@ -51,7 +51,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
       setUrl(url);
       window.history.replaceState({}, "", url);
     },
-    [headers]
+    [headers],
   );
 
   const createEncodedUrl = useCallback(() => {
@@ -111,7 +111,7 @@ export default function GraphQlComponent({ serverData }: IServerData) {
     (content: string) => {
       setValue("query", content);
     },
-    [setValue]
+    [setValue],
   );
 
   const handlePrettify = useCallback(() => {

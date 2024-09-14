@@ -10,7 +10,7 @@ describe("RedirectButton", () => {
     render(
       <MemoryRouter>
         <RedirectButton text="Go to Dashboard" redirectPath="/dashboard" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     const buttonElement = screen.getByText("Go to Dashboard");
     expect(buttonElement).to.exist;
@@ -26,7 +26,7 @@ describe("RedirectButton", () => {
           redirectPath="/dashboard"
           onClick={mockOnClick}
         />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const buttonElement = screen.getByText("Go to Dashboard");
@@ -41,7 +41,7 @@ describe("RedirectButton", () => {
     render(
       <MemoryRouter>
         <RedirectButton text="Go to Dashboard" redirectPath="/dashboard" />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const linkElement = screen.getByText("Go to Dashboard").closest("a");

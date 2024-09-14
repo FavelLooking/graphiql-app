@@ -210,7 +210,7 @@ describe("i18n configuration", () => {
 
   it("should render HTML tags in translations correctly", () => {
     expect(i18n.t("courseInfo")).toContain(
-      '<a href="https://rs.school/courses/reactjs"'
+      '<a href="https://rs.school/courses/reactjs"',
     );
   });
 });

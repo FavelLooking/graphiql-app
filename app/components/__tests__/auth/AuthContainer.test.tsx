@@ -29,7 +29,7 @@ describe("AuthContainer", () => {
             <AuthContainer />
           </I18nextProvider>
         </BrowserRouter>
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByRole("heading", { name: /Login/i })).toBeTruthy();
@@ -43,7 +43,7 @@ describe("AuthContainer", () => {
             <AuthContainer />
           </I18nextProvider>
         </BrowserRouter>
-      </Provider>
+      </Provider>,
     );
 
     fireEvent.click(screen.getByText("Register"));

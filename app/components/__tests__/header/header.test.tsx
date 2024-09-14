@@ -46,7 +46,7 @@ describe("Header", () => {
             <Header />
           </I18nextProvider>
         </MemoryRouter>
-      </Provider>
+      </Provider>,
     );
 
     const logo = screen.getByAltText("logo");
@@ -64,7 +64,7 @@ describe("Header", () => {
             <Header />
           </I18nextProvider>
         </MemoryRouter>
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByText("Sign In")).toBeInTheDocument();
@@ -74,7 +74,7 @@ describe("Header", () => {
   it("should show 'Sign Out' button when a token is present", () => {
     // Mocking a state with a token
     vi.spyOn(store.getState().auth, "token", "get").mockReturnValue(
-      "fake-token"
+      "fake-token",
     );
 
     render(
@@ -84,7 +84,7 @@ describe("Header", () => {
             <Header />
           </I18nextProvider>
         </MemoryRouter>
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByText("Sign Out")).toBeInTheDocument();
