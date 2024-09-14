@@ -7,7 +7,6 @@ import { Link } from "@remix-run/react";
 
 import { useTranslation } from "react-i18next";
 
-
 export const History: React.FC = () => {
   const [links, setLinks] = useState<{ query: string; route: string }[]>([]);
   const items = useSelector((state: RootState) => state.history.queries);

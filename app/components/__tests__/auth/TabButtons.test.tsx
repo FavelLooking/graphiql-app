@@ -28,7 +28,7 @@ describe("TabButtons", () => {
         <I18nextProvider i18n={i18n}>
           <TabButtons activeTab="login" onTabChange={mockOnTabChange} />
         </I18nextProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
     );
 
     expect(screen.queryByText("Login")).not.toBeNull();
