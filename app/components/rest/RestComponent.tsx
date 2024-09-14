@@ -21,7 +21,6 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
     Array<{ key: string; value: string }>
   >([{ key: "", value: "" }]);
   const [bodyContent, setBodyContent] = useState<string>("");
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
