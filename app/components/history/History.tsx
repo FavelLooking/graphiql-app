@@ -3,14 +3,21 @@ import styles from "./history.module.scss";
 import { RedirectButton } from "../button/RedirectButton";
 import { useSelector } from "react-redux";
 import { RootState } from "~/store/store";
-import { Link } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 
 import { useTranslation } from "react-i18next";
-
 
 export const History: React.FC = () => {
   const [links, setLinks] = useState<{ query: string; route: string }[]>([]);
   const items = useSelector((state: RootState) => state.history.queries);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     setLinks(items);

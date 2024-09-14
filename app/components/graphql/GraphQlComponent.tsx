@@ -53,6 +53,13 @@ export default function GraphQlComponent({ serverData }: IServerData) {
   const [targetUrl, setUrl] = useState("");
   const { t } = useTranslation();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   const showToast = (toastText: string) => {
     toast(toastText);
   };
