@@ -168,9 +168,7 @@ describe("CodeEditor Component", () => {
     const editorInstance = fromTextAreaMock.mock.results[0].value;
 
     const onMock = editorInstance.on as unknown as vi.Mock;
-    const blurHandler = onMock.mock.calls.find(
-      (call) => call[0] === "blur",
-    )[1];
+    const blurHandler = onMock.mock.calls.find((call) => call[0] === "blur")[1];
 
     blurHandler();
 
@@ -207,9 +205,7 @@ describe("CodeEditor Component", () => {
 
     const onMock = mockVariablesEditorInstance.on as unknown as vi.Mock;
 
-    const blurHandler = onMock.mock.calls.find(
-      (call) => call[0] === "blur",
-    )[1];
+    const blurHandler = onMock.mock.calls.find((call) => call[0] === "blur")[1];
 
     blurHandler();
 

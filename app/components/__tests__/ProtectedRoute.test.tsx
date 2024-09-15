@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { MemoryRouter, Route, Routes, Navigate } from "react-router-dom";
 import { vi } from "vitest";
@@ -44,7 +44,7 @@ describe("ProtectedRoute", () => {
     );
   };
 
-  test("redirects to redirectPath if token exists", () => {
+  test("redirects to redirectPath if token exists", async () => {
     const storeWithToken = mockStore({
       auth: { token: "fakeToken" },
     });
@@ -54,7 +54,9 @@ describe("ProtectedRoute", () => {
       storeWithToken,
     );
 
-    expect(container.innerHTML).toContain("main");
+    await waitFor(() => {
+      expect(container.innerHTML).toContain("main");
+    });
   });
 
   test("renders element if token does not exist", () => {
@@ -70,7 +72,7 @@ describe("ProtectedRoute", () => {
     expect(getByText("Protected Content")).toBeInTheDocument();
   });
 
-  test("redirects to default path '/' when no redirectPath is provided and token exists", () => {
+  test("redirects to default path '/' when no redirectPath is provided and token exists", async () => {
     const storeWithToken = mockStore({
       auth: { token: "fakeToken" },
     });
@@ -80,7 +82,9 @@ describe("ProtectedRoute", () => {
       storeWithToken,
     );
 
-    expect(container.innerHTML).toContain("main");
+    await waitFor(() => {
+      expect(container.innerHTML).toContain("main");
+    });
   });
 
   test("renders the protected component if no token and doesn't redirect", () => {
