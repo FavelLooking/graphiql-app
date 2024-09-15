@@ -69,7 +69,6 @@ describe("RegisterForm", () => {
       </Provider>,
     );
 
-    // Simulate filling out the form
     fireEvent.change(screen.getByLabelText(/email/i), {
       target: { value: "test@example.com" },
     });
@@ -80,7 +79,6 @@ describe("RegisterForm", () => {
       target: { value: "password123" },
     });
 
-    // Mock the form submission process
     const submitButton = screen.getByRole("button", { name: /sign up/i });
 
     fireEvent.click(submitButton);

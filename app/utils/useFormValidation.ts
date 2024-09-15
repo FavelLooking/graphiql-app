@@ -38,7 +38,6 @@ export const useFormValidation = (
       confirmPassword: confirmPasswordError,
     });
 
-    // Form validation
     setIsFormValid(
       !emailError &&
         !passwordError &&
