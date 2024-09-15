@@ -7,7 +7,8 @@ import CodeMirror from "codemirror";
 import styles from "./editor.module.scss";
 import { useTranslation } from "react-i18next";
 
-interface ICodeEditorProps {
+
+export interface ICodeEditorProps {
   onChange: (content: string) => void;
   onVariablesChange: (variables: string) => void;
   onBlur?: () => void;
@@ -54,7 +55,7 @@ const CodeEditor: React.FC<ICodeEditorProps> = ({
     editorRef.current.on("blur", onBlur || (() => {}));
 
     variablesEditorRef.current = codemirror.fromTextArea(variablesRef.current, {
-      placeholder: "Enter GraphQL variables here (JSON format)...",
+      placeholder: t("placeholders.enterGraphQLVariables"),
       theme: "dracula",
       mode: { name: "javascript", json: true },
       lineNumbers: true,
@@ -111,7 +112,7 @@ const CodeEditor: React.FC<ICodeEditorProps> = ({
         type="button"
         className={styles.variableButton}
       >
-        {isVariablesVisible ? "Hide Variables" : "Show Variables"}
+        {isVariablesVisible ? t("buttons.hide") : t("buttons.show")}
       </button>
 
       <div

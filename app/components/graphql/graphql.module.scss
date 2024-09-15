@@ -3,20 +3,44 @@
   flex-direction: row;
   justify-content: space-between;
   text-align: left;
-  gap: 2rem;
+  gap: 1rem;
   padding: 0 2rem;
+
+  @media (max-width: 1250px) {
+    flex-wrap: wrap;
+  }
+  @media (max-width: 850px) {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.5rem;
+  }
 }
 
 .responseContainer,
 .documentationContainer {
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 40%;
   min-height: 70vh;
   background-color: #f9f9f9;
   border-radius: 8px;
   padding: 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 930px) {
+    width: 90%;
+  }
+}
+
+.documentationContainer {
+  @media (max-width: 1250px) {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+  }
 }
 
 .title {
@@ -40,8 +64,15 @@
 .formContainer {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.3rem;
   width: 45%;
+  min-width: 30%;
+
+  @media (max-width: 930px) {
+    width: 80%;
+    align-items: center;
+  }
 }
 
 .inputField,
@@ -86,4 +117,8 @@
 .documentationTitle {
   margin-bottom: 1rem;
   color: #555;
+}
+
+.responseStatusTitle {
+  margin: 0.2rem 0;
 }
