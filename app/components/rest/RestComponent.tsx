@@ -3,12 +3,12 @@ import { useLocation, useNavigate } from "@remix-run/react";
 import { useDispatch } from "react-redux";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
-import "codemirror/theme/isotope.css";
+import "codemirror/theme/dracula.css";
 import styles from "./restcomponent.module.scss";
 import { saveQuery } from "~/store/historySlice";
 import { IRestComponentProps } from "~/components/rest/RestComponent.interface";
 import { useTranslation } from "react-i18next";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 export const RestComponent: React.FC<IRestComponentProps> = ({
   serverData,
@@ -16,12 +16,14 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
   const [selectedMethod, setSelectedMethod] = useState<string>("");
   const [endpoint, setEndpoint] = useState<string>("");
   const [headers, setHeaders] = useState<Array<{ key: string; value: string }>>(
-    [{ key: "", value: "" }]
+    [{ key: "", value: "" }],
   );
   const [variables, setVariables] = useState<
     Array<{ key: string; value: string }>
   >([{ key: "", value: "" }]);
   const [bodyContent, setBodyContent] = useState<string>("");
+  const [showBodyVariables, setShowBodyVariables] = useState<boolean>(false);
+  const [bodyVariablesContent, setBodyVariablesContent] = useState<string>("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,10 +31,10 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
   const { t } = useTranslation();
 
   const warnToast = (str: string) => {
-    toast.warn(str,{
-      position: "bottom-right"}
-    )
-  }
+    toast.warn(str, {
+      position: "bottom-right",
+    });
+  };
 
   const decodeBase64 = (str: string) => {
     return decodeURIComponent(escape(atob(str)));
@@ -53,20 +55,21 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
 
       queryParams.forEach((value, key) => {
         if (
-            key.toLowerCase() === "authorization" ||
-            key.toLowerCase() === "content-type"
+          key.toLowerCase() === "authorization" ||
+          key.toLowerCase() === "content-type"
         ) {
           newHeaders.push({ key, value });
         } else {
           newVariables.push({ key, value });
-      }});
+        }
+      });
 
       setSelectedMethod(method);
       setEndpoint(decodedEndpoint);
       setBodyContent(encodedBodyContent);
       setHeaders(newHeaders.length > 0 ? newHeaders : [{ key: "", value: "" }]);
       setVariables(
-        newVariables.length > 0 ? newVariables : [{ key: "", value: "" }]
+        newVariables.length > 0 ? newVariables : [{ key: "", value: "" }],
       );
     }
   }, [location]);
@@ -97,7 +100,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
       const prettified = JSON.stringify(parsed, null, 2);
       setBodyContent(prettified);
     } catch (error) {
-      warnToast("Invalid JSON format")
+      warnToast("Invalid JSON format");
     }
   };
 
@@ -116,25 +119,51 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
         .filter((header) => header.key)
         .map(
           (header) =>
-            `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`
+            `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`,
         ),
       ...variables
         .filter((variable) => variable.key)
         .map(
           (variable) =>
-            `${encodeURIComponent(variable.key)}=${encodeURIComponent(variable.value)}`
+            `${encodeURIComponent(variable.key)}=${encodeURIComponent(variable.value)}`,
         ),
     ].join("&");
-    const encodedBody = bodyContent ? encodeBase64(bodyContent) : 'null'
 
-    const url = `/${selectedMethod}/${encodedEndpoint}${bodyContent ? `/${encodedBody}` : ""}${
+    let mergedBodyContent = bodyContent;
+
+    if (bodyVariablesContent) {
+      try {
+        const bodyContentJson = bodyContent ? JSON.parse(bodyContent) : {};
+        const bodyVariablesJson = JSON.parse(bodyVariablesContent);
+        const mergedBody = {
+          ...bodyContentJson,
+          ...bodyVariablesJson,
+        };
+        mergedBodyContent = JSON.stringify(mergedBody);
+      } catch (error) {
+        return;
+      }
+    }
+
+    const encodedBodyContent = mergedBodyContent
+      ? encodeBase64(mergedBodyContent)
+      : null;
+
+    const url = `/${selectedMethod}/${encodedEndpoint}${bodyContent ? `/${encodedBodyContent}` : ""}${
       queryParams ? `?${queryParams}` : ""
     }`;
 
     if (url) {
       window.history.replaceState(null, "", url);
     }
-  }, [selectedMethod, endpoint, headers, variables, bodyContent]);
+  }, [
+    selectedMethod,
+    endpoint,
+    headers,
+    variables,
+    bodyContent,
+    bodyVariablesContent,
+  ]);
 
   useEffect(() => {
     if (selectedMethod) updateURL();
@@ -142,21 +171,41 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
 
   const handleSubmit = () => {
     const encodedEndpoint = encodeBase64(endpoint);
-    const encodedBodyContent = bodyContent ? encodeBase64(bodyContent) : null;
     const queryParams = [
       ...headers
         .filter((header) => header.key)
         .map(
           (header) =>
-            `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`
+            `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`,
         ),
       ...variables
         .filter((variable) => variable.key)
         .map(
           (variable) =>
-            `${encodeURIComponent(variable.key)}=${encodeURIComponent(variable.value)}`
+            `${encodeURIComponent(variable.key)}=${encodeURIComponent(variable.value)}`,
         ),
     ].join("&");
+
+    let mergedBodyContent = bodyContent;
+
+    if (bodyVariablesContent) {
+      try {
+        const bodyContentJson = bodyContent ? JSON.parse(bodyContent) : {};
+        const bodyVariablesJson = JSON.parse(bodyVariablesContent);
+        const mergedBody = {
+          ...bodyContentJson,
+          ...bodyVariablesJson,
+        };
+        mergedBodyContent = JSON.stringify(mergedBody);
+      } catch (error) {
+        warnToast("Invalid JSON format in body or body variables");
+        return;
+      }
+    }
+
+    const encodedBodyContent = mergedBodyContent
+      ? encodeBase64(mergedBodyContent)
+      : null;
 
     const url = `/${selectedMethod}/${encodedEndpoint}${encodedBodyContent ? `/${encodedBodyContent}` : ""}${
       queryParams ? `?${queryParams}` : ""
@@ -279,7 +328,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
             value={bodyContent}
             options={{
               mode: "application/json",
-              theme: "isotope",
+              theme: "dracula",
               lineNumbers: true,
             }}
             onBeforeChange={(editor, data, value) => {
@@ -287,6 +336,30 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
             }}
             onBlur={updateURL}
           />
+          <button
+            onClick={() => setShowBodyVariables(!showBodyVariables)}
+            className={styles.toggleButton}
+          >
+            {showBodyVariables ? "Hide Body Variables" : "Show Body Variables"}
+          </button>
+
+          {showBodyVariables && (
+            <div className={styles.bodySection}>
+              <h4>Body Variables</h4>
+              <CodeMirror
+                value={bodyVariablesContent}
+                options={{
+                  mode: "application/json",
+                  theme: "dracula",
+                  lineNumbers: true,
+                }}
+                onBeforeChange={(editor, data, value) => {
+                  setBodyVariablesContent(value);
+                }}
+                onBlur={updateURL}
+              />
+            </div>
+          )}
           <button onClick={prettifyContent} className={styles.prettifyButton}>
             Prettify
           </button>

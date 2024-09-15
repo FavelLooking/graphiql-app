@@ -22,7 +22,7 @@ const RegisterForm: React.FC = () => {
   const { errors, isFormValid, isTouched, handleBlur } = useFormValidation(
     email,
     password,
-    confirmPassword
+    confirmPassword,
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,7 +33,7 @@ const RegisterForm: React.FC = () => {
         email,
         password,
         dispatch,
-        t
+        t,
       );
       setNotification({
         message: result.message,

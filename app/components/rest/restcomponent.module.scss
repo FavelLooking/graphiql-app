@@ -82,15 +82,18 @@
   overflow-x: auto;
 }
 
-.prettifyButton{
+.prettifyButton,
+.toggleButton {
   padding: 8px;
   background-color: #28a745;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin: 5px;
 }
 
-.prettifyButton:hover {
+.prettifyButton:hover,
+.toggleButton:hover {
   background-color: #218838;
 }
