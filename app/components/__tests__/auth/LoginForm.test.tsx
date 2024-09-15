@@ -78,14 +78,11 @@ describe("LoginForm", () => {
     const passwordInput = screen.getByLabelText(/password/i);
     const submitButton = screen.getByRole("button", { name: /sign in/i });
 
-    // Simulate user input
     fireEvent.change(emailInput, { target: { value: "test@example.com" } });
     fireEvent.change(passwordInput, { target: { value: "Password123!" } });
 
-    // Submit the form
     fireEvent.click(submitButton);
 
-    // Wait for the notification to appear
     await waitFor(() =>
       expect(screen.getByText("Login successful!")).toBeInTheDocument(),
     );
@@ -98,7 +95,6 @@ describe("LoginForm", () => {
       expect.anything(),
     );
 
-    // Cleanup mock
     mockAuthSubmit.mockRestore();
   });
 });

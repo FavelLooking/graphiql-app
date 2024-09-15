@@ -10,7 +10,6 @@ export const loader = async ({
   request: Request;
 }) => {
   const { method, endpoint } = params;
-  console.log(method, endpoint);
 
   if (!endpoint) {
     throw new Response("Endpoint is required", { status: 400 });

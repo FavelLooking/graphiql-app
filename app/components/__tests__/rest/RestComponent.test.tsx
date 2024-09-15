@@ -66,7 +66,6 @@ vi.mock("react-router-dom", async () => {
   };
 });
 
-
 interface IControlledProps {
   value?: string;
   onBeforeChange?: (editor: unknown, data: unknown, value: string) => void;

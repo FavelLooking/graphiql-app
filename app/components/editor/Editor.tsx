@@ -7,7 +7,6 @@ import CodeMirror from "codemirror";
 import styles from "./editor.module.scss";
 import { useTranslation } from "react-i18next";
 
-
 export interface ICodeEditorProps {
   onChange: (content: string) => void;
   onVariablesChange: (variables: string) => void;
