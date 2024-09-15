@@ -1,0 +1,112 @@
+@import "../../styles/colors";
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  height: 4em;
+  width: 100%;
+  position: fixed;
+  background: $base-color-dark;
+  transition: 0.5s all;
+  z-index: 10;
+}
+
+.isSticky {
+  background: $base-color-white;
+  height: 3em;
+}
+
+.isSticky .img_logo {
+  width: 2em;
+  height: 2em;
+}
+
+.isSticky .toggle label {
+  color: $base-color-dark;
+}
+
+.isSticky .auth {
+  width: 15%;
+}
+
+.img_logo {
+  width: 3em;
+  height: 3em;
+  transition: 0.5s all;
+}
+
+.toggle {
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  label {
+    color: $base-color-white;
+    position: relative;
+    transition: 0.5s all;
+  }
+
+  input[type="checkbox"] + label::before {
+    content: " ";
+    display: block;
+    height: 18px;
+    width: 45px;
+    border: 1px solid $base-color-dark;
+    border-radius: 9px;
+    position: absolute;
+    top: 0px;
+    left: -65px;
+    background: #600707;
+    transition: 0.5s all;
+  }
+
+  input[type="checkbox"] + label::after {
+    content: "RU";
+    display: block;
+    height: 30px;
+    width: 30px;
+    border: 1px solid $base-color-dark;
+    border-radius: 50%;
+    position: absolute;
+    top: -6px;
+    left: -75px;
+    background: #1aff00;
+    transition: all 0.3s ease-in;
+  }
+
+  input[type="checkbox"]:checked + label::after {
+    content: "EN";
+    left: -40px;
+    transition: all 0.3s ease-in;
+  }
+}
+
+.auth {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 20%;
+  transition: 0.5s all;
+}
+
+.link {
+  display: none;
+}
+
+.mainButton {
+  color: black;
+  font-size: 13.3px;
+  border-radius: 4px;
+  padding: 0.75rem;
+  border: 1px $base-color-dark solid;
+  background-color: $color-tab-default;
+  cursor: pointer;
+  text-decoration: none;
+}
+.mainButton:hover {
+  background-color: $color-tab-hover;
+  color: $base-color-dark;
+}

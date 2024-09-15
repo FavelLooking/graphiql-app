@@ -1,0 +1,103 @@
+@import "../../styles/colors";
+
+.authContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: $color-background-light;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px $color-box-shadow;
+  max-width: 415px;
+  margin: 2rem auto;
+
+  form {
+    width: 100%;
+  }
+}
+
+.tabButtons {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.tabButton {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  margin: 0 0.25rem;
+  background-color: $color-tab-default;
+  color: $color-tab-text;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $color-tab-hover;
+  }
+
+  &.active {
+    background-color: $color-tab-active;
+    color: $color-white;
+  }
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+  width: 100%;
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: $color-label-text;
+    font-weight: 600;
+  }
+
+  input {
+    width: 95%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid $color-border;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: $color-input-focus-border;
+      outline: none;
+    }
+  }
+}
+
+.submitButton {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $color-white;
+  background-color: $color-button-bg;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:not(.submitButtonDisabled):hover {
+    background-color: $color-button-hover-bg;
+  }
+}
+
+.submitButtonDisabled {
+  background-color: $color-button-bg-disabled;
+  color: $color-text-disabled;
+  cursor: not-allowed;
+}
+
+.error {
+  height: 14px;
+  width: 100%;
+  color: $color-text-error;
+  font-size: 12px;
+}

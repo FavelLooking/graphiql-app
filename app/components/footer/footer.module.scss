@@ -1,0 +1,36 @@
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  background: #232323;
+  color: #eee;
+}
+
+.link_GH {
+  padding: 3px;
+  color: #eee;
+
+  &:visited {
+    color: #eee;
+  }
+}
+
+.link_GH:hover {
+  background: #eeeeee;
+  color: #232323;
+  padding: 3px;
+  border-radius: 5px;
+}
+
+.link_course {
+  width: 3em;
+  height: 3em;
+  padding: 10px;
+  border-radius: 30px;
+  padding: 2px;
+}
+
+.link_course:hover {
+  background: #eeeeee;
+}

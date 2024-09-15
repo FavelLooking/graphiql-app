@@ -1,0 +1,72 @@
+.historyContainer {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  text-align: center;
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
+}
+
+.linkContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.queryLinks {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
+}
+
+.emptyHistory {
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 8px;
+  color: #666;
+  margin-top: 1rem;
+
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+
+    @media (max-width: 480px) {
+      font-size: 1rem;
+    }
+  }
+
+  .links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+      gap: 0.5rem;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
