@@ -6,7 +6,6 @@ import { MemoryRouter } from "react-router-dom";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import { createInstance } from "i18next";
 import store from "../../../store/store";
-// import { auth } from "../../../utils/firebaseConfig";
 import "@testing-library/jest-dom";
 
 const i18n = createInstance();
@@ -72,7 +71,6 @@ describe("Header", () => {
   });
 
   it("should show 'Sign Out' button when a token is present", () => {
-    // Mocking a state with a token
     vi.spyOn(store.getState().auth, "token", "get").mockReturnValue(
       "fake-token",
     );
@@ -89,31 +87,4 @@ describe("Header", () => {
 
     expect(screen.getByText("Sign Out")).toBeInTheDocument();
   });
-
-  // it("should call handleSignOut when 'Sign Out' is clicked", () => {
-  //   const signOutMock = vi.fn();
-
-  //   // Mocking signOut method from firebase auth
-  //   vi.spyOn(auth, "signOut").mockImplementation(signOutMock); // Updated
-
-  //   // Mocking a state with a token
-  //   vi.spyOn(store.getState().auth, "token", "get").mockReturnValue(
-  //     "fake-token"
-  //   );
-
-  //   render(
-  //     <Provider store={store}>
-  //       <MemoryRouter>
-  //         <I18nextProvider i18n={i18n}>
-  //           <Header />
-  //         </I18nextProvider>
-  //       </MemoryRouter>
-  //     </Provider>
-  //   );
-
-  //   const signOutButton = screen.getByText("Sign Out");
-  //   fireEvent.click(signOutButton);
-
-  //   expect(signOutMock).toHaveBeenCalled();
-  // });
 });

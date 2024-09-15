@@ -8,8 +8,8 @@ import styles from "./auth.module.scss";
 import Notification from "../notification/Notification";
 
 const LoginForm: React.FC = () => {
-  const [email, setEmail] = useState("tosterstudy@mail.com"); // Prefilled email
-  const [password, setPassword] = useState("toster123!"); // Prefilled password
+  const [email, setEmail] = useState("tosterstudy@mail.com");
+  const [password, setPassword] = useState("toster123!");
   const [notification, setNotification] = useState<{
     message: string;
     type: "success" | "error";

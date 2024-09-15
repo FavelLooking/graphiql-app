@@ -198,8 +198,8 @@ describe("i18n configuration", () => {
   });
 
   it("should fallback to English if translation is not available in the current language", () => {
-    i18n.changeLanguage("fr"); // Set a non-existent language
-    expect(i18n.t("buttons.signIn")).toBe("Sign In"); // Fallback to English
+    i18n.changeLanguage("fr");
+    expect(i18n.t("buttons.signIn")).toBe("Sign In");
   });
 
   it("should correctly handle translation in Russian", () => {

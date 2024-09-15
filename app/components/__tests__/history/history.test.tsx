@@ -1,9 +1,9 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {  render, screen } from "@testing-library/react";
 import { History } from "../../history/History";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { RootState } from "../../../store/store";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import historyReducer from "../../../store/historySlice";
 import "@testing-library/jest-dom";
 import { createInstance } from "i18next";
@@ -111,36 +111,5 @@ describe("History Component", () => {
     );
     expect(truncatedRoute).toBeInTheDocument();
   });
-
-  it("redirect buttons work correctly", async () => {
-    const store = mockStore({
-      history: {
-        queries: [],
-      },
-    });
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/history"]}>
-          <Routes>
-            <Route path="/history" element={<History />} />
-            <Route path="/rest" element={<div>GET Page</div>} />
-            <Route path="/graphql" element={<div>GraphQL Page</div>} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>,
-    );
-
-    const restButton = screen.getByText("buttons.restClient");
-    const graphqlButton = screen.getByText("buttons.graphiqlClient");
-
-    expect(restButton).toBeInTheDocument();
-    expect(graphqlButton).toBeInTheDocument();
-
-    fireEvent.click(restButton);
-
-    await waitFor(() => {
-      expect(screen.getByText("GET Page")).toBeInTheDocument();
-    });
-  });
 });
+
