@@ -4,7 +4,7 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration,
+  ScrollRestoration, useRouteError,
 } from "@remix-run/react";
 import { Provider, useDispatch } from "react-redux";
 import { useEffect } from "react";
@@ -38,6 +38,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </body>
       </Provider>
     </html>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  return (
+      <div>
+        <h1>Something went wrong</h1>
+        <pre>{error.message}</pre>
+      </div>
   );
 }
 
