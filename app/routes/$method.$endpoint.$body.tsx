@@ -2,14 +2,8 @@ import { json, LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { RestComponent } from "~/components/rest/RestComponent";
 
-export const loader: LoaderFunction = async ({
-  params,
-  request,
-}: {
-  params: unknown;
-  request: Request;
-}) => {
-  const { method, endpoint, body } = params;
+export const loader: LoaderFunction = async ({ params, request }) => {
+  const { method, endpoint, body } = params as Record<string, string>;
   console.log(method, endpoint, body);
 
   if (!endpoint) {
@@ -36,9 +30,16 @@ export const loader: LoaderFunction = async ({
     }
   });
 
-  const requestBody = decodedBody ? JSON.parse(decodedBody) : {};
-  if (Object.keys(variables).length > 0) {
-    requestBody.variables = variables;
+  let requestBody = null;
+  if (decodedBody) {
+    try {
+      requestBody = JSON.parse(decodedBody);
+    } catch (error) {
+      return json({
+        data: "Invalid JSON format in request body.",
+        response: 400,
+      });
+    }
   }
 
   const fetchOptions: RequestInit = {

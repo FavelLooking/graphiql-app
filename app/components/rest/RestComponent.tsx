@@ -3,16 +3,17 @@ import { useLocation, useNavigate } from "@remix-run/react";
 import { useDispatch } from "react-redux";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
-import "codemirror/theme/isotope.css";
+import "codemirror/theme/dracula.css";
 import styles from "./restcomponent.module.scss";
 import { saveQuery } from "~/store/historySlice";
 import { IRestComponentProps } from "~/components/rest/RestComponent.interface";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 export const RestComponent: React.FC<IRestComponentProps> = ({
   serverData,
 }) => {
-  const [selectedMethod, setSelectedMethod] = useState<string>("GET");
+  const [selectedMethod, setSelectedMethod] = useState<string>("");
   const [endpoint, setEndpoint] = useState<string>("");
   const [headers, setHeaders] = useState<Array<{ key: string; value: string }>>(
     [{ key: "", value: "" }],
@@ -21,10 +22,19 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
     Array<{ key: string; value: string }>
   >([{ key: "", value: "" }]);
   const [bodyContent, setBodyContent] = useState<string>("");
+  const [showBodyVariables, setShowBodyVariables] = useState<boolean>(false);
+  const [bodyVariablesContent, setBodyVariablesContent] = useState<string>("");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
+
+  const warnToast = (str: string) => {
+    toast.warn(str, {
+      position: "bottom-right",
+    });
+  };
 
   const decodeBase64 = (str: string) => {
     return decodeURIComponent(escape(atob(str)));
@@ -44,10 +54,13 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
       const newVariables: Array<{ key: string; value: string }> = [];
 
       queryParams.forEach((value, key) => {
-        if (key.startsWith("header_")) {
-          newHeaders.push({ key: key.replace("header_", ""), value });
-        } else if (key.startsWith("var_")) {
-          newVariables.push({ key: key.replace("var_", ""), value });
+        if (
+          key.toLowerCase() === "authorization" ||
+          key.toLowerCase() === "content-type"
+        ) {
+          newHeaders.push({ key, value });
+        } else {
+          newVariables.push({ key, value });
         }
       });
 
@@ -81,11 +94,25 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
     setVariables(newVariables);
   };
 
+  const prettifyContent = () => {
+    try {
+      const parsed = JSON.parse(bodyContent);
+      const prettified = JSON.stringify(parsed, null, 2);
+      setBodyContent(prettified);
+    } catch (error) {
+      warnToast("Invalid JSON format");
+    }
+  };
+
   const encodeBase64 = (str: string) => {
     return btoa(unescape(encodeURIComponent(str)));
   };
 
   const updateURL = useCallback(() => {
+    if (!selectedMethod && !endpoint) {
+      return;
+    }
+
     const encodedEndpoint = encodeBase64(endpoint);
     const queryParams = [
       ...headers
@@ -102,19 +129,48 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
         ),
     ].join("&");
 
-    const url = `/${selectedMethod}/${encodedEndpoint}${bodyContent ? `/${encodeBase64(bodyContent)}` : ""}${
+    let mergedBodyContent = bodyContent;
+
+    if (bodyVariablesContent) {
+      try {
+        const bodyContentJson = bodyContent ? JSON.parse(bodyContent) : {};
+        const bodyVariablesJson = JSON.parse(bodyVariablesContent);
+        const mergedBody = {
+          ...bodyContentJson,
+          ...bodyVariablesJson,
+        };
+        mergedBodyContent = JSON.stringify(mergedBody);
+      } catch (error) {
+        return;
+      }
+    }
+
+    const encodedBodyContent = mergedBodyContent
+      ? encodeBase64(mergedBodyContent)
+      : null;
+
+    const url = `/${selectedMethod}/${encodedEndpoint}${bodyContent ? `/${encodedBodyContent}` : ""}${
       queryParams ? `?${queryParams}` : ""
     }`;
-    window.history.replaceState(null, "", url);
-  }, [selectedMethod, endpoint, headers, variables, bodyContent]);
+
+    if (url) {
+      window.history.replaceState(null, "", url);
+    }
+  }, [
+    selectedMethod,
+    endpoint,
+    headers,
+    variables,
+    bodyContent,
+    bodyVariablesContent,
+  ]);
 
   useEffect(() => {
-    updateURL();
-  }, [updateURL]);
+    if (selectedMethod) updateURL();
+  }, [selectedMethod, updateURL]);
 
   const handleSubmit = () => {
     const encodedEndpoint = encodeBase64(endpoint);
-    const encodedBodyContent = bodyContent ? encodeBase64(bodyContent) : null;
     const queryParams = [
       ...headers
         .filter((header) => header.key)
@@ -129,6 +185,27 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
             `${encodeURIComponent(variable.key)}=${encodeURIComponent(variable.value)}`,
         ),
     ].join("&");
+
+    let mergedBodyContent = bodyContent;
+
+    if (bodyVariablesContent) {
+      try {
+        const bodyContentJson = bodyContent ? JSON.parse(bodyContent) : {};
+        const bodyVariablesJson = JSON.parse(bodyVariablesContent);
+        const mergedBody = {
+          ...bodyContentJson,
+          ...bodyVariablesJson,
+        };
+        mergedBodyContent = JSON.stringify(mergedBody);
+      } catch (error) {
+        warnToast("Invalid JSON format in body or body variables");
+        return;
+      }
+    }
+
+    const encodedBodyContent = mergedBodyContent
+      ? encodeBase64(mergedBodyContent)
+      : null;
 
     const url = `/${selectedMethod}/${encodedEndpoint}${encodedBodyContent ? `/${encodedBodyContent}` : ""}${
       queryParams ? `?${queryParams}` : ""
@@ -156,6 +233,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
         }}
         className={styles.apiMethod}
       >
+        <option value="">-- Select Method --</option>
         <option value="GET">GET</option>
         <option value="POST">POST</option>
         <option value="PUT">PUT</option>
@@ -244,24 +322,48 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
         </button>
       </div>
 
-      {selectedMethod !== "GET" && (
+      {selectedMethod && selectedMethod !== "GET" && (
         <div className={styles.bodySection}>
           <h4>{t("titles.body")}</h4>
           <CodeMirror
             value={bodyContent}
             options={{
               mode: "application/json",
-              theme: "isotope",
+              theme: "dracula",
               lineNumbers: true,
             }}
             onBeforeChange={(editor, data, value) => {
               setBodyContent(value);
             }}
-            onChange={(editor, data, value) => {
-              setBodyContent(value);
-            }}
             onBlur={updateURL}
           />
+          <button
+            onClick={() => setShowBodyVariables(!showBodyVariables)}
+            className={styles.toggleButton}
+          >
+            {showBodyVariables ? "Hide Body Variables" : "Show Body Variables"}
+          </button>
+
+          {showBodyVariables && (
+            <div className={styles.bodySection}>
+              <h4>Body Variables</h4>
+              <CodeMirror
+                value={bodyVariablesContent}
+                options={{
+                  mode: "application/json",
+                  theme: "dracula",
+                  lineNumbers: true,
+                }}
+                onBeforeChange={(editor, data, value) => {
+                  setBodyVariablesContent(value);
+                }}
+                onBlur={updateURL}
+              />
+            </div>
+          )}
+          <button onClick={prettifyContent} className={styles.prettifyButton}>
+            Prettify
+          </button>
         </div>
       )}
 
