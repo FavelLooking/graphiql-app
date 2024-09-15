@@ -4,7 +4,6 @@ import { RestComponent } from "~/components/rest/RestComponent";
 
 export const loader: LoaderFunction = async ({ params, request }) => {
   const { method, endpoint, body } = params as Record<string, string>;
-  console.log(method, endpoint, body);
 
   if (!endpoint) {
     throw new Response("Endpoint is required", { status: 400 });

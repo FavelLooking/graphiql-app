@@ -19,10 +19,8 @@ export const handleAuthSubmit = async (
   try {
     let userCredential: UserCredential;
     if (isLogin) {
-      // Login
       userCredential = await signInWithEmailAndPassword(auth, email, password);
     } else {
-      // Register
       userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -30,7 +28,6 @@ export const handleAuthSubmit = async (
       );
     }
 
-    // Get ID token and expiration information
     const idTokenResult = await userCredential.user.getIdTokenResult();
 
     const token = idTokenResult.token;
@@ -39,7 +36,6 @@ export const handleAuthSubmit = async (
         Date.now() / 1000
       : null;
 
-    // Save token and expiresIn to Redux
     dispatch(
       setToken({
         token,

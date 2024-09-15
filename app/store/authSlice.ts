@@ -39,7 +39,6 @@ const authSlice = createSlice({
         localStorage.setItem("token", action.payload.token);
         localStorage.setItem("email", action.payload.email);
         localStorage.setItem("expiresIn", action.payload.expiresIn.toString());
-        console.log("Token set in localStorage:", action.payload.token);
       }
     },
     clearToken: (state) => {
@@ -51,7 +50,6 @@ const authSlice = createSlice({
         localStorage.removeItem("token");
         localStorage.removeItem("email");
         localStorage.removeItem("expiresIn");
-        console.log("Token cleared from localStorage");
       }
     },
   },
