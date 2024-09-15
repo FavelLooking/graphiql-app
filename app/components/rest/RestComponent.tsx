@@ -227,7 +227,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
   };
 
   return (
-    <div>
+    <div className={styles.restContainer}>
       <select
         name="method"
         aria-label="method"
