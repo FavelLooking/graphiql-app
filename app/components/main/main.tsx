@@ -1,12 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./main.module.scss";
 import { auth } from "../../utils/firebaseConfig";
 import { RedirectButton } from "../button/RedirectButton";
 import { useTranslation } from "react-i18next";
+import { onAuthStateChanged } from "firebase/auth";
 
 export const Main: React.FC = () => {
-  const user = auth.currentUser;
   const { t } = useTranslation();
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [user, setUser] = useState(auth.currentUser);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setIsHydrated(true);
+
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (!isHydrated || loading) {
+    return (
+      <>
+        <div className={styles.loader}>Loading...</div>
+      </>
+    );
+  }
 
   return (
     <main className={styles.container}>

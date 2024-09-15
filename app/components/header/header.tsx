@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./header.module.scss";
 import { RedirectButton } from "../button/RedirectButton";
@@ -14,6 +14,7 @@ export const Header: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const [isHydrated, setIsHydrated] = useState(false);
 
   const token = useSelector((state: RootState) => state.auth.token);
 
@@ -22,6 +23,10 @@ export const Header: React.FC = () => {
     dispatch(clearToken());
     navigate("/");
   };
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,6 +45,10 @@ export const Header: React.FC = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  if (!isHydrated) {
+    return null;
+  }
 
   return (
     <header ref={headerRef} className={styles.header}>
