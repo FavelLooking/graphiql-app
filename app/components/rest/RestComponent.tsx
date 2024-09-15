@@ -198,7 +198,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
         };
         mergedBodyContent = JSON.stringify(mergedBody);
       } catch (error) {
-        warnToast("Invalid JSON format in body or body variables");
+        warnToast("Invalid JSON format");
         return;
       }
     }

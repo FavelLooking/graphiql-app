@@ -67,20 +67,16 @@ i18n.init({
       translation: {
         enterURL: "please, enter URL",
         response: "Response",
-        buttons: {
-          submit: "Submit",
-        },
+        "buttons.submit": "Submit",
+        "buttons.prettify": "Prettify",
+        "buttons.getSDLScheme": "Get SDL Scheme",
+        "titles.endpointURL": "Endpoint URL:",
+        "titles.sdlURL": "SDL URL:",
+        "titles.headers": "Headers",
+        "notifications.urlFail": "URL isn't valid",
       },
     },
   },
-});
-
-vi.mock("react-i18next", async (importOriginal) => {
-  const actual = (await importOriginal()) as Record<string, string>;
-  return {
-    ...actual,
-    useTranslation: () => ({ t: (key: string) => key }),
-  };
 });
 
 const mockStore = (initialState: Partial<RootState>) =>
@@ -123,18 +119,30 @@ describe("GraphQlComponent", () => {
   it("renders the component correctly", () => {
     renderComponent();
 
-    expect(screen.getByText("Endpoint URL:")).toBeInTheDocument();
-    expect(screen.getByText("SDL URL:")).toBeInTheDocument();
-    expect(screen.getByText(/headers/i)).toBeInTheDocument();
-    expect(screen.getByText(/submit/i)).toBeInTheDocument();
-    expect(screen.getByText(/prettify/i)).toBeInTheDocument();
-    expect(screen.getByText(/getSDLScheme/i)).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(i18n.t("titles.endpointURL")),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText(i18n.t("titles.sdlURL"))).toBeInTheDocument();
+    expect(
+      screen.getByText(new RegExp(`^${i18n.t("titles.headers")}:$`)),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", {
+        name: i18n.t("buttons.submit").toUpperCase(),
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: i18n.t("buttons.prettify") }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: i18n.t("buttons.getSDLScheme") }),
+    ).toBeInTheDocument();
   });
 
   it("shows a warning when an invalid URL is submitted", async () => {
     renderComponent();
 
-    fireEvent.change(screen.getByLabelText(/Endpoint URL:/i), {
+    fireEvent.change(screen.getByLabelText(/endpoint URL/i), {
       target: { value: "invalid-url" },
     });
     fireEvent.change(screen.getByPlaceholderText(/Mocked Input/i), {
@@ -143,7 +151,7 @@ describe("GraphQlComponent", () => {
     fireEvent.click(screen.getByText(/submit/i));
 
     await waitFor(() => {
-      expect(toast.warn).toHaveBeenCalledWith("URL isn't valid");
+      expect(toast.warn).toHaveBeenCalledWith(i18n.t("notifications.urlFail"));
     });
   });
 

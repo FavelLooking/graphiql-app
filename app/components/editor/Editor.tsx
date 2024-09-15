@@ -117,7 +117,11 @@ const CodeEditor: React.FC<ICodeEditorProps> = ({
       <div
         className={`${styles.variablesEditor} ${isVariablesVisible ? styles.visible : styles.hidden}`}
       >
-        <textarea ref={variablesRef} className={styles.textarea} />
+        <textarea
+          ref={variablesRef}
+          className={styles.textarea}
+          data-testid="variables-editor"
+        />
       </div>
     </div>
   );
