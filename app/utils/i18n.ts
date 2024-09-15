@@ -21,6 +21,7 @@ const resources = {
         getSDLScheme: "Get SDL Scheme",
         hide: "Hide Variables",
         show: "Show Variables",
+        mainButton: "Main Page",
       },
       titles: {
         email: "Email",
@@ -113,6 +114,7 @@ const resources = {
         getSDLScheme: "Получить SDL схему",
         hide: "Показать переменные",
         show: "Скрыть переменные",
+        mainButton: "Главная страница",
       },
       titles: {
         email: "Электронная почта",

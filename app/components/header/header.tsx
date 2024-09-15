@@ -20,7 +20,7 @@ export const Header: React.FC = () => {
   const handleSignOut = async () => {
     await auth.signOut();
     dispatch(clearToken());
-    navigate("/auth");
+    navigate("/");
   };
 
   useEffect(() => {
@@ -62,7 +62,15 @@ export const Header: React.FC = () => {
             />
           </>
         ) : (
-          <RedirectButton text={t("buttons.signOut")} onClick={handleSignOut} />
+          <>
+            <RedirectButton
+              text={t("buttons.signOut")}
+              onClick={handleSignOut}
+            />
+            <Link className={styles.mainButton} to="/">
+              {t("buttons.mainButton")}
+            </Link>
+          </>
         )}
       </div>
     </header>
