@@ -7,7 +7,7 @@ import styles from "./graphql.module.scss";
 import { buildClientSchema, getIntrospectionQuery, printSchema } from "graphql";
 import { createGraphiQLFetcher } from "@graphiql/toolkit";
 import { useDispatch } from "react-redux";
-import { saveQuery } from "~/store/historySlice";
+import { saveQuery } from "../../store/historySlice";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 

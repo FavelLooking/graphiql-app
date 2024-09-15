@@ -21,7 +21,6 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
     Array<{ key: string; value: string }>
   >([{ key: "", value: "" }]);
   const [bodyContent, setBodyContent] = useState<string>("");
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -149,6 +148,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
     <div>
       <select
         name="method"
+        aria-label="method"
         value={selectedMethod}
         onChange={(e) => {
           setSelectedMethod(e.target.value);
@@ -278,7 +278,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
           <h3>Status</h3>
           <h5>Response status: {serverData.response}</h5>
           <h3>Response:</h3>
-          <pre className={styles.response}>
+          <pre className={styles.response} data-testid="server-response">
             {JSON.stringify(serverData.data, null, 2)}
           </pre>
         </div>
