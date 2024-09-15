@@ -1,13 +1,13 @@
-import {render, screen, waitFor, within} from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import { Main } from "../../main/main";
 import { vi } from "vitest";
 import "@testing-library/jest-dom";
 import { auth } from "~/utils/firebaseConfig";
-import {createInstance} from "i18next";
-import {Provider} from "react-redux";
+import { createInstance } from "i18next";
+import { Provider } from "react-redux";
 import store from "~/store/store";
-import {MemoryRouter} from "react-router-dom";
-import {I18nextProvider} from "react-i18next";
+import { MemoryRouter } from "react-router-dom";
+import { I18nextProvider } from "react-i18next";
 
 vi.mock("../../../utils/firebaseConfig", () => ({
   auth: {
@@ -15,12 +15,12 @@ vi.mock("../../../utils/firebaseConfig", () => ({
   },
 }));
 
-vi.mock('firebase/auth', () => ({
+vi.mock("firebase/auth", () => ({
   getAuth: vi.fn(() => ({
     currentUser: null,
   })),
   onAuthStateChanged: vi.fn((auth, callback) => {
-    callback({ uid: 'testUser' });
+    callback({ uid: "testUser" });
     return () => {};
   }),
 }));
@@ -53,8 +53,8 @@ i18n.init({
         },
       },
     },
-  }
-})
+  },
+});
 
 describe("Main Component", () => {
   afterEach(() => {
@@ -63,13 +63,13 @@ describe("Main Component", () => {
 
   test("renders main sections correctly", async () => {
     render(
-        <Provider store={store}>
-          <MemoryRouter>
-            <I18nextProvider i18n={i18n}>
-              <Main />
-            </I18nextProvider>
-          </MemoryRouter>
-        </Provider>,
+      <Provider store={store}>
+        <MemoryRouter>
+          <I18nextProvider i18n={i18n}>
+            <Main />
+          </I18nextProvider>
+        </MemoryRouter>
+      </Provider>,
     );
 
     await waitFor(() => {
@@ -78,18 +78,18 @@ describe("Main Component", () => {
       expect(screen.getByText("description")).toBeInTheDocument();
       expect(screen.getByText("developers")).toBeInTheDocument();
       expect(screen.getByText("cource")).toBeInTheDocument();
-    })
+    });
   });
 
   test("renders developer information correctly", async () => {
     render(
-        <Provider store={store}>
-          <MemoryRouter>
-            <I18nextProvider i18n={i18n}>
-              <Main />
-            </I18nextProvider>
-          </MemoryRouter>
-        </Provider>,
+      <Provider store={store}>
+        <MemoryRouter>
+          <I18nextProvider i18n={i18n}>
+            <Main />
+          </I18nextProvider>
+        </MemoryRouter>
+      </Provider>,
     );
     await waitFor(() => {
       expect(screen.getByText("maxim")).toBeInTheDocument();
@@ -104,23 +104,23 @@ describe("Main Component", () => {
         name: "github",
       });
       expect(maximLink).toHaveAttribute(
-          "href",
-          "https://github.com/maximozaitsev",
+        "href",
+        "https://github.com/maximozaitsev",
       );
-    })
+    });
   });
 
   test("renders rest, graphql, and history buttons when user is signed in", () => {
     auth.currentUser = { uid: "123", email: "test@example.com" };
 
     render(
-        <Provider store={store}>
-          <MemoryRouter>
-            <I18nextProvider i18n={i18n}>
-              <Main />
-            </I18nextProvider>
-          </MemoryRouter>
-        </Provider>,
+      <Provider store={store}>
+        <MemoryRouter>
+          <I18nextProvider i18n={i18n}>
+            <Main />
+          </I18nextProvider>
+        </MemoryRouter>
+      </Provider>,
     );
     expect(screen.getByText("buttons.restClient")).toBeInTheDocument();
     expect(screen.getByText("buttons.graphiqlClient")).toBeInTheDocument();
@@ -129,13 +129,13 @@ describe("Main Component", () => {
 
   test("renders course information with HTML content", () => {
     render(
-        <Provider store={store}>
-          <MemoryRouter>
-            <I18nextProvider i18n={i18n}>
-              <Main />
-            </I18nextProvider>
-          </MemoryRouter>
-        </Provider>,
+      <Provider store={store}>
+        <MemoryRouter>
+          <I18nextProvider i18n={i18n}>
+            <Main />
+          </I18nextProvider>
+        </MemoryRouter>
+      </Provider>,
     );
     expect(screen.getByText("courseInfo")).toBeInTheDocument();
   });

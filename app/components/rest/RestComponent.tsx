@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "@remix-run/react";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/dracula.css";
@@ -9,7 +9,7 @@ import { saveQuery } from "~/store/historySlice";
 import { IRestComponentProps } from "~/components/rest/RestComponent.interface";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import {checkRouting} from '~/utils/checkRouting'
+import { checkRouting } from "~/utils/checkRouting";
 
 export const RestComponent: React.FC<IRestComponentProps> = ({
   serverData,
@@ -32,8 +32,8 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (!checkRouting()) navigate('/')
-  }, [navigate])
+    if (!checkRouting()) navigate("/");
+  }, [navigate]);
 
   const warnToast = (str: string) => {
     toast.warn(str, {

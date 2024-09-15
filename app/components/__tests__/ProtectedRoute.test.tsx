@@ -1,5 +1,5 @@
 import React from "react";
-import {render, waitFor} from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { MemoryRouter, Route, Routes, Navigate } from "react-router-dom";
 import { vi } from "vitest";
@@ -46,12 +46,12 @@ describe("ProtectedRoute", () => {
 
   test("redirects to redirectPath if token exists", async () => {
     const storeWithToken = mockStore({
-      auth: {token: "fakeToken"},
+      auth: { token: "fakeToken" },
     });
 
-    const {container} = renderWithProviders(
-        <ProtectedRoute element={<Main/>}/>,
-        storeWithToken,
+    const { container } = renderWithProviders(
+      <ProtectedRoute element={<Main />} />,
+      storeWithToken,
     );
 
     await waitFor(() => {
@@ -74,12 +74,12 @@ describe("ProtectedRoute", () => {
 
   test("redirects to default path '/' when no redirectPath is provided and token exists", async () => {
     const storeWithToken = mockStore({
-      auth: {token: "fakeToken"},
+      auth: { token: "fakeToken" },
     });
 
-    const {container} = renderWithProviders(
-        <ProtectedRoute element={<Main/>}/>,
-        storeWithToken,
+    const { container } = renderWithProviders(
+      <ProtectedRoute element={<Main />} />,
+      storeWithToken,
     );
 
     await waitFor(() => {
