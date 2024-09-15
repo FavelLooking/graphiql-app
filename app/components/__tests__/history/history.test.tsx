@@ -6,6 +6,8 @@ import { RootState } from "../../../store/store";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import historyReducer from "../../../store/historySlice";
 import "@testing-library/jest-dom";
+import { createInstance } from "i18next";
+import { I18nextProvider } from "react-i18next";
 
 const mockStore = (initialState: Partial<RootState>) =>
   configureStore({
@@ -17,6 +19,19 @@ const mockStore = (initialState: Partial<RootState>) =>
     },
   });
 
+const i18n = createInstance();
+
+i18n.init({
+  lng: "en",
+  resources: {
+    en: {
+      translation: {
+        history: "History",
+      },
+    },
+  },
+});
+
 describe("History Component", () => {
   it("renders empty state when no history items are present", () => {
     const store = mockStore({
@@ -27,9 +42,11 @@ describe("History Component", () => {
 
     render(
       <Provider store={store}>
-        <MemoryRouter>
-          <History />
-        </MemoryRouter>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter>
+            <History />
+          </MemoryRouter>
+        </I18nextProvider>
       </Provider>,
     );
 

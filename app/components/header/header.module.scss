@@ -95,3 +95,18 @@
 .link {
   display: none;
 }
+
+.mainButton {
+  color: black;
+  font-size: 13.3px;
+  border-radius: 4px;
+  padding: 0.75rem;
+  border: 1px $base-color-dark solid;
+  background-color: $color-tab-default;
+  cursor: pointer;
+  text-decoration: none;
+}
+.mainButton:hover {
+  background-color: $color-tab-hover;
+  color: $base-color-dark;
+}
