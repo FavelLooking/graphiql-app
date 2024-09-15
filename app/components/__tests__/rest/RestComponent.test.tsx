@@ -27,10 +27,21 @@ i18n.init({
         "buttons.addVariable": "Add Variable",
         "buttons.addHeader": "Add Header",
         "buttons.sendRequest": "Send Request",
+        "placeholders.apiEndpoint": "API Endpoint",
+        "placeholders.headerKey": "Header Key",
+        "placeholders.headerValue": "Header Value",
+        "placeholders.variableKey": "Variable Key",
+        "placeholders.variableValue": "Variable Value",
       },
     },
   },
 });
+
+vi.mock("react-toastify", () => ({
+  toast: {
+    warn: vi.fn(),
+  },
+}));
 
 const dispatchMock = vi.fn();
 
@@ -65,7 +76,6 @@ vi.mock("react-router-dom", async () => {
     useLocation: () => useLocationMock(),
   };
 });
-
 
 interface IControlledProps {
   value?: string;
@@ -114,7 +124,9 @@ describe("RestComponent", () => {
 
   test("Компонент рендерится без ошибок", () => {
     renderComponent();
-    expect(screen.getByPlaceholderText("API Endpoint")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(i18n.t("placeholders.apiEndpoint")),
+    ).toBeInTheDocument();
   });
 
   test("Можно выбрать HTTP-метод", () => {
@@ -126,7 +138,9 @@ describe("RestComponent", () => {
 
   test("Обновление поля endpoint", () => {
     renderComponent();
-    const endpointInput = screen.getByPlaceholderText("API Endpoint");
+    const endpointInput = screen.getByPlaceholderText(
+      i18n.t("placeholders.apiEndpoint"),
+    );
     fireEvent.change(endpointInput, {
       target: { value: "https://api.example.com" },
     });
@@ -149,14 +163,27 @@ describe("RestComponent", () => {
     expect(variableKeys.length).toBeGreaterThan(1);
   });
 
-  test("Обновление URL при изменении состояния", () => {
+  test("Обновление URL при изменении состояния", async () => {
     const replaceStateSpy = vi.spyOn(window.history, "replaceState");
     renderComponent();
-    const endpointInput = screen.getByPlaceholderText("API Endpoint");
-    fireEvent.change(endpointInput, {
-      target: { value: "https://swapi.dev/api/" },
+
+    const methodSelect = screen.getByRole("combobox", { name: "method" });
+    await act(async () => {
+      fireEvent.change(methodSelect, { target: { value: "GET" } });
     });
-    expect(replaceStateSpy).toHaveBeenCalled();
+
+    const endpointInput = screen.getByPlaceholderText(
+      i18n.t("placeholders.apiEndpoint"),
+    );
+    await act(async () => {
+      fireEvent.change(endpointInput, {
+        target: { value: "https://swapi.dev/api/" },
+      });
+    });
+
+    await waitFor(() => {
+      expect(replaceStateSpy).toHaveBeenCalled();
+    });
   });
 
   test("Рендеринг ответа сервера", () => {
@@ -241,7 +268,6 @@ describe("RestComponent", () => {
     const headerKeys = screen.getAllByPlaceholderText("Header Key");
     const headerValues = screen.getAllByPlaceholderText("Header Value");
 
-    // Изменяем второй заголовок
     fireEvent.change(headerKeys[1], { target: { value: "Authorization" } });
     fireEvent.change(headerValues[1], { target: { value: "Bearer token" } });
 
@@ -257,7 +283,6 @@ describe("RestComponent", () => {
     const variableKeys = screen.getAllByPlaceholderText("Variable Key");
     const variableValues = screen.getAllByPlaceholderText("Variable Value");
 
-    // Изменяем вторую переменную
     fireEvent.change(variableKeys[1], { target: { value: "userId" } });
     fireEvent.change(variableValues[1], { target: { value: "456" } });
 
@@ -307,4 +332,58 @@ describe("RestComponent", () => {
       expect(screen.getByTestId("code-mirror")).toBeInTheDocument();
     },
   );
+
+  test("Не вызывает updateURL при пустом методе и пустом endpoint", () => {
+    const replaceStateSpy = vi.spyOn(window.history, "replaceState");
+
+    renderComponent();
+
+    expect(replaceStateSpy).not.toHaveBeenCalled();
+  });
+
+  test("Показ и скрытие переменных тела", async () => {
+    renderComponent();
+    const methodSelect = screen.getByRole("combobox", { name: "method" });
+
+    fireEvent.change(methodSelect, { target: { value: "POST" } });
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: /Show Body Variables/i }),
+      ).toBeInTheDocument();
+    });
+    fireEvent.click(
+      screen.getByRole("button", { name: /Show Body Variables/i }),
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: /Hide Body Variables/i }),
+      ).toBeInTheDocument();
+    });
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /Hide Body Variables/i }),
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: /Show Body Variables/i }),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test("Проверка отображения заголовков и переменных после добавления", () => {
+    renderComponent();
+
+    const addHeaderButton = screen.getByText("Add Header");
+    fireEvent.click(addHeaderButton);
+    const headerKeys = screen.getAllByPlaceholderText("Header Key");
+    expect(headerKeys.length).toBeGreaterThan(1);
+
+    const addVariableButton = screen.getByText("Add Variable");
+    fireEvent.click(addVariableButton);
+    const variableKeys = screen.getAllByPlaceholderText("Variable Key");
+    expect(variableKeys.length).toBeGreaterThan(1);
+  });
 });
