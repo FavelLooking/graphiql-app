@@ -165,7 +165,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
       <input
         type="text"
         name="endpoint"
-        placeholder="API Endpoint"
+        placeholder={t("placeholders.apiEndpoint")}
         value={endpoint}
         onChange={(e) => {
           setEndpoint(e.target.value);
@@ -180,7 +180,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
           <div key={index} className={styles.variableRow}>
             <input
               type="text"
-              placeholder="Variable Key"
+              placeholder={t("placeholders.variableKey")}
               value={variable.key}
               onChange={(e) => {
                 handleVariableChange(index, e.target.value, variable.value);
@@ -190,7 +190,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
             />
             <input
               type="text"
-              placeholder="Variable Value"
+              placeholder={t("placeholders.variableValue")}
               value={variable.value}
               onChange={(e) => {
                 handleVariableChange(index, variable.key, e.target.value);
@@ -215,7 +215,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
           <div key={index} className={styles.headerRow}>
             <input
               type="text"
-              placeholder="Header Key"
+              placeholder={t("placeholders.headerKey")}
               value={header.key}
               onChange={(e) => {
                 handleHeaderChange(index, e.target.value, header.value);
@@ -225,7 +225,7 @@ export const RestComponent: React.FC<IRestComponentProps> = ({
             />
             <input
               type="text"
-              placeholder="Header Value"
+              placeholder={t("placeholders.headerValue")}
               value={header.value}
               onChange={(e) => {
                 handleHeaderChange(index, header.key, e.target.value);
