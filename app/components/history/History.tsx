@@ -6,10 +6,18 @@ import { RootState } from "~/store/store";
 import { Link } from "@remix-run/react";
 
 import { useTranslation } from "react-i18next";
+import {checkRouting} from "~/utils/checkRouting";
+import {useNavigate} from "react-router-dom";
 
 export const History: React.FC = () => {
   const [links, setLinks] = useState<{ query: string; route: string }[]>([]);
   const items = useSelector((state: RootState) => state.history.queries);
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!checkRouting()) navigate('/')
+  }, [navigate])
 
   useEffect(() => {
     setLinks(items);

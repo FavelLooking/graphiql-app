@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { saveQuery } from "../../store/historySlice";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import {checkRouting} from "~/utils/checkRouting";
 
 type GraphQlInput = {
   apiUrl: string;
@@ -52,6 +53,10 @@ export default function GraphQlComponent({ serverData }: IServerData) {
   const [schemaString, setSchemaString] = useState<string>("");
   const [targetUrl, setUrl] = useState("");
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (!checkRouting()) navigate('/')
+  }, [navigate])
 
   const showToast = (toastText: string) => {
     toast(toastText);
