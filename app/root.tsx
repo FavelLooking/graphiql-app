@@ -15,7 +15,7 @@ import { Header } from "./components/header/header";
 import { Footer } from "./components/footer/footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import "./utils/i18n";
 import "./global.scss";
 
 export function Layout({ children }: { children: React.ReactNode }) {
