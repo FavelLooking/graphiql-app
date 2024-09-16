@@ -1,4 +1,4 @@
-import "./utils/i18n";
+import React, { Suspense, useEffect } from "react";
 import {
   Links,
   Meta,
@@ -8,10 +8,9 @@ import {
   useRouteError,
 } from "@remix-run/react";
 import { Provider, useDispatch } from "react-redux";
-import { useEffect } from "react";
 import { checkTokenExpiration } from "./store/authSlice";
 import store, { AppDispatch } from "./store/store";
-// import { Header } from "./components/header/header";
+import { Header } from "./components/header/header";
 import { Footer } from "./components/footer/footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -30,9 +29,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <Provider store={store}>
         <body>
-          {/* <Header /> */}
-          <main>{children}</main>
-          <Footer />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </Suspense>
           <ScrollRestoration />
           <Scripts />
           <ToastContainer />
@@ -60,5 +61,9 @@ export default function App() {
     dispatch(checkTokenExpiration());
   }, [dispatch]);
 
-  return <Outlet />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Outlet />
+    </Suspense>
+  );
 }
