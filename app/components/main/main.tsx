@@ -2,11 +2,11 @@ import React, { useEffect, useState, Suspense } from "react";
 import styles from "./main.module.scss";
 import { auth } from "../../utils/firebaseConfig";
 import { RedirectButton } from "../button/RedirectButton";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next"; // Правильное использование useTranslation
 import { onAuthStateChanged } from "firebase/auth";
 
 export const Main: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(); // Получаем функцию t для переводов
   const [isHydrated, setIsHydrated] = useState(false);
   const [user, setUser] = useState(auth.currentUser);
   const [loading, setLoading] = useState(true);
@@ -30,7 +30,7 @@ export const Main: React.FC = () => {
     <Suspense fallback={<div>Loading main content...</div>}>
       <main className={styles.container}>
         <section className={styles.welcomeSection}>
-          <h1>{t("welcome")}</h1>
+          <h1>{t("welcome")}</h1> {/* Используем функцию t для переводов */}
           <p className={styles.description}>{t("description")}</p>
         </section>
 
@@ -54,8 +54,6 @@ export const Main: React.FC = () => {
                 {t("github")}
               </a>
             </div>
-            {/* Other developer sections */}
-            {/* Repeated developer sections omitted for brevity */}
           </div>
         </section>
 

@@ -8,8 +8,10 @@ import {
   // useRouteError,
 } from "@remix-run/react";
 import { Provider, useDispatch } from "react-redux";
-import { checkTokenExpiration } from "./store/authSlice";
+import { I18nextProvider } from "react-i18next";
+import i18n from "./utils/i18n";
 import store, { AppDispatch } from "./store/store";
+import { checkTokenExpiration } from "./store/authSlice";
 import { Header } from "./components/header/header";
 import { Footer } from "./components/footer/footer";
 import { ToastContainer } from "react-toastify";
@@ -27,32 +29,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <Provider store={store}>
-        <body>
-          <Suspense fallback={<div>Loading...</div>}>
-            <Header />
-            <main>{children}</main>
-            <Footer />
-          </Suspense>
-          <ScrollRestoration />
-          <Scripts />
-          <ToastContainer />
-        </body>
+        <I18nextProvider i18n={i18n}>
+          {" "}
+          {/* Оборачиваем приложение I18nextProvider */}
+          <body>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Header />
+              <main>{children}</main>
+              <Footer />
+            </Suspense>
+            <ScrollRestoration />
+            <Scripts />
+            <ToastContainer />
+          </body>
+        </I18nextProvider>
       </Provider>
     </html>
   );
 }
-
-// export function ErrorBoundary() {
-//   const error = useRouteError();
-//   console.error(error); // Log the error for debugging
-
-//   return (
-//     <div>
-//       <h1>Something went wrong</h1>
-//       <pre>{error?.message || "Unknown error"}</pre>
-//     </div>
-//   );
-// }
 
 export default function App() {
   const dispatch: AppDispatch = useDispatch();
