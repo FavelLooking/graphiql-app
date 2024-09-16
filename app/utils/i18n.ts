@@ -191,13 +191,18 @@ const resources = {
 };
 
 // eslint-disable-next-line import/no-named-as-default-member
-i18n.use(initReactI18next).init({
-  resources,
-  lng: "en",
-  fallbackLng: "en",
-  interpolation: {
-    escapeValue: false,
-  },
-});
+i18n
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: "en",
+    fallbackLng: "en",
+    interpolation: {
+      escapeValue: false,
+    },
+  })
+  .then(() => {
+    console.log("i18n initialized successfully");
+  });
 
 export default i18n;
