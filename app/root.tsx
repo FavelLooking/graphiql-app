@@ -1,13 +1,14 @@
-import React, { Suspense, useEffect } from "react";
+import "./utils/i18n";
 import {
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  // useRouteError,
+  useRouteError,
 } from "@remix-run/react";
 import { Provider, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { checkTokenExpiration } from "./store/authSlice";
 import store, { AppDispatch } from "./store/store";
 import { Header } from "./components/header/header";
@@ -29,11 +30,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <Provider store={store}>
         <body>
-          <Suspense fallback={<div>Loading...</div>}>
-            <Header />
-            <main>{children}</main>
-            <Footer />
-          </Suspense>
+          <Header />
+          <main>{children}</main>
+          <Footer />
           <ScrollRestoration />
           <Scripts />
           <ToastContainer />
@@ -43,16 +42,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-// export function ErrorBoundary() {
-//   const error = useRouteError();
+export function ErrorBoundary() {
+  const error = useRouteError();
 
-//   // return (
-//   //   <div>
-//   //     <h1>Something went wrong</h1>
-//   //     <pre>{error.message}</pre>
-//   //   </div>
-//   // );
-// }
+  return (
+    <div>
+      <h1>Something went wrong</h1>
+      <pre>{error.message}</pre>
+    </div>
+  );
+}
 
 export default function App() {
   const dispatch: AppDispatch = useDispatch();
@@ -61,9 +60,5 @@ export default function App() {
     dispatch(checkTokenExpiration());
   }, [dispatch]);
 
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Outlet />
-    </Suspense>
-  );
+  return <Outlet />;
 }
