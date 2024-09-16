@@ -5,7 +5,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useRouteError,
+  // useRouteError,
 } from "@remix-run/react";
 import { Provider, useDispatch } from "react-redux";
 import { checkTokenExpiration } from "./store/authSlice";
@@ -14,7 +14,6 @@ import { Header } from "./components/header/header";
 import { Footer } from "./components/footer/footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import "./global.scss";
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -43,16 +42,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function ErrorBoundary() {
-  const error = useRouteError();
+// export function ErrorBoundary() {
+//   const error = useRouteError();
+//   console.error(error); // Log the error for debugging
 
-  return (
-    <div>
-      <h1>Something went wrong</h1>
-      <pre>{error.message}</pre>
-    </div>
-  );
-}
+//   return (
+//     <div>
+//       <h1>Something went wrong</h1>
+//       <pre>{error?.message || "Unknown error"}</pre>
+//     </div>
+//   );
+// }
 
 export default function App() {
   const dispatch: AppDispatch = useDispatch();
