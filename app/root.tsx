@@ -11,7 +11,7 @@ import { Provider, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { checkTokenExpiration } from "./store/authSlice";
 import store, { AppDispatch } from "./store/store";
-import { Header } from "./components/header/header";
+// import { Header } from "./components/header/header";
 import { Footer } from "./components/footer/footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -30,7 +30,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <Provider store={store}>
         <body>
-          <Header />
+          {/* <Header /> */}
           <main>{children}</main>
           <Footer />
           <ScrollRestoration />
